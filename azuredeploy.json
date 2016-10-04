@@ -1,0 +1,1437 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "agentCount": {
+      "allowedValues": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59,
+        60,
+        61,
+        62,
+        63,
+        64,
+        65,
+        66,
+        67,
+        68,
+        69,
+        70,
+        71,
+        72,
+        73,
+        74,
+        75,
+        76,
+        77,
+        78,
+        79,
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94,
+        95,
+        96,
+        97,
+        98,
+        99,
+        100
+      ],
+      "defaultValue": 1,
+      "metadata": {
+        "description": "The number of Mesos agents for the cluster.  This value can be from 1 to 100"
+      },
+      "type": "int"
+    },
+    "agentEndpointDNSNamePrefix": {
+      "metadata": {
+        "description": "Sets the Domain name label for the agent pool IP Address.  The concatenation of the domain name label and the regional DNS zone make up the fully qualified domain name associated with the public IP address."
+      },
+      "type": "string"
+    },
+    "agentVMSize": {
+      "allowedValues": [
+        "Standard_A0",
+        "Standard_A1",
+        "Standard_A2",
+        "Standard_A3",
+        "Standard_A4",
+        "Standard_A5",
+        "Standard_A6",
+        "Standard_A7",
+        "Standard_A8",
+        "Standard_A9",
+        "Standard_A10",
+        "Standard_A11",
+        "Standard_D1",
+        "Standard_D2",
+        "Standard_D3",
+        "Standard_D4",
+        "Standard_D11",
+        "Standard_D12",
+        "Standard_D13",
+        "Standard_D14",
+        "Standard_D1_v2",
+        "Standard_D2_v2",
+        "Standard_D3_v2",
+        "Standard_D4_v2",
+        "Standard_D5_v2",
+        "Standard_D11_v2",
+        "Standard_D12_v2",
+        "Standard_D13_v2",
+        "Standard_D14_v2",
+        "Standard_G1",
+        "Standard_G2",
+        "Standard_G3",
+        "Standard_G4",
+        "Standard_G5",
+        "Standard_DS1",
+        "Standard_DS2",
+        "Standard_DS3",
+        "Standard_DS4",
+        "Standard_DS11",
+        "Standard_DS12",
+        "Standard_DS13",
+        "Standard_DS14",
+        "Standard_DS15",
+        "Standard_GS1",
+        "Standard_GS2",
+        "Standard_GS3",
+        "Standard_GS4",
+        "Standard_GS5"
+      ],
+      "defaultValue": "Standard_D2",
+      "metadata": {
+        "description": "The size of the Virtual Machine."
+      },
+      "type": "string"
+    },
+    "disablePasswordAuthentication": {
+      "defaultValue": true,
+      "metadata": {
+        "description": "This setting controls whether password auth is disabled for Linux VMs provisioned by this template. Default is true which disables password and makes SSH key required."
+      },
+      "type": "bool"
+    },
+    "enableNewStorageAccountNaming": {
+      "defaultValue": true,
+      "metadata": {
+        "description": "If true: uses DNS name prefix + Orchestrator name + Region to create storage account name to reduce name collision probability. If false: uses DNS name prefix + Orchestrator name to create storage account name to maintain template idempotency."
+      },
+      "type": "bool"
+    },
+    "enableVMDiagnostics": {
+      "defaultValue": true,
+      "metadata": {
+        "description": "Allows user to enable/disable boot & vm diagnostics."
+      },
+      "type": "bool"
+    },
+    "isValidation": {
+      "allowedValues": [
+        0,
+        1
+      ],
+      "defaultValue": 0,
+      "metadata": {
+        "description": "This is testing in the validation region"
+      },
+      "type": "int"
+    },
+    "jumpboxEndpointDNSNamePrefix": {
+      "defaultValue": "",
+      "metadata": {
+        "description": "Sets the Domain name label for the jumpbox.  The concatenation of the domain name label and the regionalized DNS zone make up the fully qualified domain name associated with the public IP address."
+      },
+      "type": "string"
+    },
+    "linuxAdminPassword": {
+      "defaultValue": "",
+      "metadata": {
+        "description": "Password for the Linux Virtual Machine.  Not Required.  If not set, you must provide a SSH key."
+      },
+      "type": "securestring"
+    },
+    "linuxAdminUsername": {
+      "defaultValue": "azureuser",
+      "metadata": {
+        "description": "User name for the Linux Virtual Machines (SSH or Password)."
+      },
+      "type": "string"
+    },
+    "linuxOffer": {
+      "defaultValue": "UbuntuServer",
+      "metadata": {
+        "description": "This is the offer of the image used by the linux cluster"
+      },
+      "type": "string"
+    },
+    "linuxPublisher": {
+      "defaultValue": "Canonical",
+      "metadata": {
+        "description": "This is the publisher of the image used by the linux cluster"
+      },
+      "type": "string"
+    },
+    "linuxSku": {
+      "defaultValue": "16.04.0-LTS",
+      "metadata": {
+        "description": "This is the linux sku used by the linux cluster"
+      },
+      "type": "string"
+    },
+    "linuxVersion": {
+      "defaultValue": "16.04.201608300",
+      "metadata": {
+        "description": "This is the linux version used by the linux cluster"
+      },
+      "type": "string"
+    },
+    "masterCount": {
+      "allowedValues": [
+        1,
+        3,
+        5
+      ],
+      "defaultValue": 1,
+      "metadata": {
+        "description": "The number of Mesos masters for the cluster."
+      },
+      "type": "int"
+    },
+    "masterEndpointDNSNamePrefix": {
+      "metadata": {
+        "description": "Sets the Domain name label for the master IP Address.  The concatenation of the domain name label and the regional DNS zone make up the fully qualified domain name associated with the public IP address."
+      },
+      "type": "string"
+    },
+
+    "postInstallScriptURI": {
+      "defaultValue": "disabled",
+      "metadata": {
+        "description": "After installation, this specifies a script to download and install.  To disabled, set value to 'disabled'."
+      },
+      "type": "string"
+    },
+    "setLinuxConfigurationForVMCreate": {
+      "allowedValues": [
+        0,
+        1
+      ],
+      "defaultValue": 1,
+      "metadata": {
+        "description": "This setting controls whether Linux configuration with SSH Key is passed in VM PUT Payload.  Defaults to 1.  If SSH Key is blank, this must be set to 0."
+      },
+      "type": "int"
+    },
+    "sshRSAPublicKey": {
+      "defaultValue": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCuxXmfo3ut0echPNekpU9pt32uxTQwex90LQr529BHHa5oCbgByqaZOQCEmuWlsHXJWp+pTlwutsxgLua9Q5iH6JEiKKiJjUsZ6a5bxHakmJdRS0LVwP+mxnf1ifXl0wRqLcS1Qi4SConfsufrges4hMM2KTN2YoAaQ2B4+vHpDJR9LuxJ9zhQnQRLQcAUdaFUmEHBhjLSpIzlEodL8DDHegEXGt/2RAlUxjhRLboDeUUk4VvIToejnxv/3m9yt7qkFGOFGsoJhpT7GUMhDm01rVEZHNZr86dC/gsz8eW+fc+wcUO4tV+2qeCR7dlLEMdChDe09zsId+Btg60yNb+R cschittk@csc-carbon",
+      "metadata": {
+        "description": "SSH public key used for auth to all Linux machines.  Not Required.  If not set, you must provide a password key."
+      },
+      "type": "string"
+    },
+    "vmsPerStorageAccount": {
+      "defaultValue": 10,
+      "metadata": {
+        "description": "This specifies the number of VMs per storage accounts"
+      },
+      "type": "int"
+    }
+  },
+  "variables": {
+    "accountid": "[concat('/subscriptions/',subscription().subscriptionId,'/resourceGroups/',variables('diagnosticsStorageAccountResourceGroup'),'/providers/','Microsoft.Storage/storageAccounts/', variables('diagnosticsStorageAccountName'))]",
+    "adminPassword": "[parameters('linuxAdminPassword')]",
+    "adminUsername": "[parameters('linuxAdminUsername')]",
+    "agentAddressPrefix": "10.0.0.0/8",
+    "agentPrivateAvailabilitySetDisk": "[concat(variables('orchestratorName'), '-priagent-availabilitySet-Disk', variables('nameSuffix'))]",
+    "agentPrivateAvailabilitySet": "[concat(variables('orchestratorName'), '-priagent-availabilitySet-', variables('nameSuffix'))]",
+    "agentPublicAvailabilitySet": "[concat(variables('orchestratorName'), '-pubagent-availabilitySet-', variables('nameSuffix'))]",
+    "agentEndpointDNSNamePrefix": "[tolower(parameters('agentEndpointDNSNamePrefix'))]",
+    "agentFirstAddr": 4,
+    "agentPrivateAddressPrefixDisk": "10.32.4.0/24",
+    "agentPrivateAddressPrefix": "10.32.7.0/24",
+    "agentPrivateCountDisk": 1,
+    "agentPrivateCount": 1,
+    "agentCountTotal": "[add(add(variables('agentPublicCount'), variables('agentPrivateCountDisk')), variables('agentPrivateCount'))]",
+    "agentPrivateSubnetNameDisk": "[concat(variables('orchestratorName'), '-agentPrivateSubnet-Disk')]",
+    "agentPrivateSubnetName": "[concat(variables('orchestratorName'), '-agentPrivateSubnet')]",
+    "agentPrivateVMNamePrefixDisk": "[concat(variables('orchestratorName'), '-agent-private-Disk', variables('nameSuffix'))]",
+    "agentPrivateVMNamePrefix": "[concat(variables('orchestratorName'), '-agent-private-', variables('nameSuffix'))]",
+    "agentPublicAddressPrefix": "10.0.0.0/11",
+    "agentPublicCount": 3,
+
+    "agentPublicIPAddressName": "[concat(variables('orchestratorName'), '-agent-ip-', variables('agentEndpointDNSNamePrefix'), '-', variables('nameSuffix'))]",
+    "agentPublicSubnetName": "[concat(variables('orchestratorName'), '-agentPublicSubnet')]",
+    "agentPublicVMNamePrefix": "[concat(variables('orchestratorName'), '-agent-public-', variables('nameSuffix'))]",
+    "agentStorageAccountsCount": "[add(div(variables('agentCountTotal'), variables('vmsPerStorageAccount')), mod(add(mod(variables('agentCountTotal'), variables('vmsPerStorageAccount')),2), add(mod(variables('agentCountTotal'), variables('vmsPerStorageAccount')),1)))]",
+    "agentStoragePrivateAccountName": "[concat(variables('storageAccountBaseName'), 'agntpri')]",
+    "agentStoragePrivateDataAccountName": "[concat(variables('storageAccountBaseName'), 'pridata')]",
+    "agentStoragePrivateDiskAccountName": "[concat(variables('storageAccountBaseName'), 'agntdisk')]",
+    "agentStoragePublicAccountName": "[concat(variables('storageAccountBaseName'), 'agntpub')]",
+    "agentVMSize": "[parameters('agentVMSize')]",
+    "agentVMSize": "Standard_D2",
+    "agentVMSizeDisk": "Standard_D2",
+    "agentsPerIPv4Octet": 200,
+    "agentsPublicLbBackendPoolName": "[concat(variables('orchestratorName'), '-agent-pool-', variables('nameSuffix'))]",
+    "agentsPublicLbID": "[resourceId('Microsoft.Network/loadBalancers',variables('agentsPublicLbName'))]",
+    "agentsPublicLbIPConfigID": "[concat(variables('agentsPublicLbID'),'/frontendIPConfigurations/', variables('agentsPublicLbIPConfigName'))]",
+    "agentsPublicLbIPConfigName": "[concat(variables('orchestratorName'), '-agent-lbFrontEnd-', variables('nameSuffix'))]",
+    "agentsPublicLbName": "[concat(variables('orchestratorName'), '-agent-lb-', variables('nameSuffix'))]",
+    "apiVersionDefault": "2016-03-30",
+    "apiVersionStorage": "2015-06-15",
+
+    "diagnosticsStorageAccountName-true": "[variables('diagnosticsStorageAccountName')]",
+    "diagnosticsStorageAccountName": "[concat(variables('storageAccountBaseName'), 'diag', '0')]",
+    "diagnosticsStorageAccountResourceGroup": "[resourceGroup().name]",
+    "disablePasswordAuthentication": "[parameters('disablePasswordAuthentication')]",
+    "enableNewStorageAccountNaming": "[parameters('enableNewStorageAccountNaming')]",
+    "enableVMDiagnostics": "[parameters('enableVMDiagnostics')]",
+    "isValidation": "[parameters('isValidation')]",
+    "linuxConfiguration": "[variables('linuxConfigurations')[1]]",
+    "linuxConfigurations": [
+      {},
+      {
+        "disablePasswordAuthentication": "[variables('disablePasswordAuthentication')]",
+        "ssh": {
+          "publicKeys": [
+            {
+              "keyData": "[variables('sshRSAPublicKey')]",
+              "path": "[variables('sshKeyPath')]"
+            }
+          ]
+        }
+      }
+    ],
+    "linuxOffer": "[parameters('linuxOffer')]",
+    "linuxPublisher": "[parameters('linuxPublisher')]",
+    "linuxSku": "[parameters('linuxSku')]",
+    "linuxVersion": "[parameters('linuxVersion')]",
+    "masterAddressPrefix": "172.16.0.0/24",
+    "masterAvailabilitySet": "[concat(variables('orchestratorName'), '-master-availabilitySet-', variables('nameSuffix'))]",
+    "masterCount": 3,
+    "masterEndpointDNSNamePrefix": "[tolower(parameters('masterEndpointDNSNamePrefix'))]",
+    "masterFirstAddr": 5,
+    "masterLbBackendPoolName": "[concat(variables('orchestratorName'), '-master-pool-', variables('nameSuffix'))]",
+    "masterLbID": "[resourceId('Microsoft.Network/loadBalancers',variables('masterLbName'))]",
+    "masterLbIPConfigID": "[concat(variables('masterLbID'),'/frontendIPConfigurations/', variables('masterLbIPConfigName'))]",
+    "masterLbIPConfigName": "[concat(variables('orchestratorName'), '-master-lbFrontEnd-', variables('nameSuffix'))]",
+    "masterLbName": "[concat(variables('orchestratorName'), '-master-lb-', variables('nameSuffix'))]",
+    "masterPublicIPAddressName": "[concat(variables('orchestratorName'), '-master-ip-', variables('masterEndpointDNSNamePrefix'), '-', variables('nameSuffix'))]",
+    "masterSizes": [
+      "Standard_D2",
+      "Standard_A1"
+    ],
+    "masterStorageAccountName": "[concat(variables('storageAccountBaseName'), 'mstr0')]",
+    "masterSubnetName": "[concat(variables('orchestratorName'), '-masterSubnet')]",
+    "masterSubnetRef": "[concat(variables('vnetID'),'/subnets/',variables('masterSubnetName'))]",
+    "masterVMNamePrefix": "[concat(variables('orchestratorName'), '-master-', variables('nameSuffix'), '-')]",
+    "masterVMNic": [
+      "[concat(variables('masterVMNamePrefix'), 'nic-0')]",
+      "[concat(variables('masterVMNamePrefix'), 'nic-1')]",
+      "[concat(variables('masterVMNamePrefix'), 'nic-2')]",
+      "[concat(variables('masterVMNamePrefix'), 'nic-3')]",
+      "[concat(variables('masterVMNamePrefix'), 'nic-4')]",
+      "[concat(variables('masterVMNamePrefix'), 'nic-5')]",
+      "[concat(variables('masterVMNamePrefix'), 'nic-6')]"
+    ],
+    "masterVMSize": "[variables('masterSizes')[variables('isValidation')]]",
+    "nameSuffix": "01234567",
+    "orchestratorName": "dcos",
+    "osImageOffer": "[variables('linuxOffer')]",
+    "osImagePublisher": "[variables('linuxPublisher')]",
+    "osImageSKU": "[variables('linuxSku')]",
+    "osImageVersion": "[variables('linuxVersion')]",
+    "sshKeyPath": "[concat('/home/', variables('adminUsername'), '/.ssh/authorized_keys')]",
+    "sshRSAPublicKey": "[parameters('sshRSAPublicKey')]",
+    "storageAccountBaseName": "[uniqueString(concat(variables('masterEndpointDNSNamePrefix'),variables(concat('storageAccountBaseNameNewSuffix', '-', variables('enableNewStorageAccountNaming'))), variables('orchestratorName')))]",
+    "storageAccountBaseNameNewSuffix-false": "",
+    "storageAccountBaseNameNewSuffix-true": "[resourceGroup().location]",
+    "dataStorageAccountPrefixSeed": 97,
+    "storageAccountPrefixes": [
+      "0",
+      "6",
+      "c",
+      "i",
+      "o",
+      "u",
+      "1",
+      "7",
+      "d",
+      "j",
+      "p",
+      "v",
+      "2",
+      "8",
+      "e",
+      "k",
+      "q",
+      "w",
+      "3",
+      "9",
+      "f",
+      "l",
+      "r",
+      "x",
+      "4",
+      "a",
+      "g",
+      "m",
+      "s",
+      "y",
+      "5",
+      "b",
+      "h",
+      "n",
+      "t",
+      "z"
+    ],
+    "storageAccountPrefixesCount": "[length(variables('storageAccountPrefixes'))]",
+    "storageAccountType": "Standard_LRS",
+    "storageLocation": "[variables('storageLocations')[variables('isValidation')]]",
+    "storageLocations": [
+      "[resourceGroup().location]",
+      "East US 2 (Stage)"
+    ],
+    "virtualNetworkName": "[concat(variables('orchestratorName'), '-vnet-', variables('nameSuffix'))]",
+    "vmSizesMap": {
+      "Standard_A0": {
+        "storageAccountType": "Standard_LRS"
+      },
+      "Standard_A1": {
+        "storageAccountType": "Standard_LRS"
+      },
+      "Standard_A10": {
+        "storageAccountType": "Standard_LRS"
+      },
+      "Standard_A11": {
+        "storageAccountType": "Standard_LRS"
+      },
+      "Standard_A2": {
+        "storageAccountType": "Standard_LRS"
+      },
+      "Standard_A3": {
+        "storageAccountType": "Standard_LRS"
+      },
+      "Standard_A4": {
+        "storageAccountType": "Standard_LRS"
+      },
+      "Standard_A5": {
+        "storageAccountType": "Standard_LRS"
+      },
+      "Standard_A6": {
+        "storageAccountType": "Standard_LRS"
+      },
+      "Standard_A7": {
+        "storageAccountType": "Standard_LRS"
+      },
+      "Standard_A8": {
+        "storageAccountType": "Standard_LRS"
+      },
+      "Standard_A9": {
+        "storageAccountType": "Standard_LRS"
+      },
+      "Standard_D1": {
+        "storageAccountType": "Standard_LRS"
+      },
+      "Standard_D11": {
+        "storageAccountType": "Standard_LRS"
+      },
+      "Standard_D11_v2": {
+        "storageAccountType": "Standard_LRS"
+      },
+      "Standard_D12": {
+        "storageAccountType": "Standard_LRS"
+      },
+      "Standard_D12_v2": {
+        "storageAccountType": "Standard_LRS"
+      },
+      "Standard_D13": {
+        "storageAccountType": "Standard_LRS"
+      },
+      "Standard_D13_v2": {
+        "storageAccountType": "Standard_LRS"
+      },
+      "Standard_D14": {
+        "storageAccountType": "Standard_LRS"
+      },
+      "Standard_D14_v2": {
+        "storageAccountType": "Standard_LRS"
+      },
+      "Standard_D15_v2": {
+        "storageAccountType": "Standard_LRS"
+      },
+      "Standard_D1_v2": {
+        "storageAccountType": "Standard_LRS"
+      },
+      "Standard_D2": {
+        "storageAccountType": "Standard_LRS"
+      },
+      "Standard_D2_v2": {
+        "storageAccountType": "Standard_LRS"
+      },
+      "Standard_D3": {
+        "storageAccountType": "Standard_LRS"
+      },
+      "Standard_D3_v2": {
+        "storageAccountType": "Standard_LRS"
+      },
+      "Standard_D4": {
+        "storageAccountType": "Standard_LRS"
+      },
+      "Standard_D4_v2": {
+        "storageAccountType": "Standard_LRS"
+      },
+      "Standard_D5_v2": {
+        "storageAccountType": "Standard_LRS"
+      },
+      "Standard_DS1": {
+        "storageAccountType": "Premium_LRS"
+      },
+      "Standard_DS11": {
+        "storageAccountType": "Premium_LRS"
+      },
+      "Standard_DS12": {
+        "storageAccountType": "Premium_LRS"
+      },
+      "Standard_DS13": {
+        "storageAccountType": "Premium_LRS"
+      },
+      "Standard_DS14": {
+        "storageAccountType": "Premium_LRS"
+      },
+      "Standard_DS15": {
+        "storageAccountType": "Premium_LRS"
+      },
+      "Standard_DS2": {
+        "storageAccountType": "Premium_LRS"
+      },
+      "Standard_DS3": {
+        "storageAccountType": "Premium_LRS"
+      },
+      "Standard_DS4": {
+        "storageAccountType": "Premium_LRS"
+      },
+      "Standard_DS4_v2": {
+        "storageAccountType": "Premium_LRS"
+      },      
+      "Standard_DS14_v2": {
+        "storageAccountType": "Premium_LRS"
+      },
+      "Standard_G1": {
+        "storageAccountType": "Standard_LRS"
+      },
+      "Standard_G2": {
+        "storageAccountType": "Standard_LRS"
+      },
+      "Standard_G3": {
+        "storageAccountType": "Standard_LRS"
+      },
+      "Standard_G4": {
+        "storageAccountType": "Standard_LRS"
+      },
+      "Standard_G5": {
+        "storageAccountType": "Standard_LRS"
+      },
+      "Standard_GS1": {
+        "storageAccountType": "Premium_LRS"
+      },
+      "Standard_GS2": {
+        "storageAccountType": "Premium_LRS"
+      },
+      "Standard_GS3": {
+        "storageAccountType": "Premium_LRS"
+      },
+      "Standard_GS4": {
+        "storageAccountType": "Premium_LRS"
+      },
+      "Standard_GS5": {
+        "storageAccountType": "Premium_LRS"
+      }
+    },
+    "vmsPerStorageAccount": "[parameters('vmsPerStorageAccount')]",
+    "vnetID": "[resourceId('Microsoft.Network/virtualNetworks',variables('virtualNetworkName'))]",
+    "wadcfgxend": "[concat('\"><MetricAggregation scheduledTransferPeriod=\"PT1H\"/><MetricAggregation scheduledTransferPeriod=\"PT1M\"/></Metrics></DiagnosticMonitorConfiguration></WadCfg>')]",
+    "wadcfgxstart": "[concat(variables('wadlogs'),variables(concat('wadperfcounters1','-',variables('enableVMDiagnostics'))),variables(concat('wadperfcounters2','-',variables('enableVMDiagnostics'))),'<Metrics resourceId=\"')]",
+    "wadlogs": "<WadCfg><DiagnosticMonitorConfiguration>",
+    "wadperfcounters1-false": "",
+    "wadperfcounters1-true": "<PerformanceCounters scheduledTransferPeriod=\"PT1M\"><PerformanceCounterConfiguration counterSpecifier=\"\\Memory\\AvailableMemory\" sampleRate=\"PT15S\" unit=\"Bytes\"><annotation displayName=\"Memory available\" locale=\"en-us\"/></PerformanceCounterConfiguration><PerformanceCounterConfiguration counterSpecifier=\"\\Memory\\PercentAvailableMemory\" sampleRate=\"PT15S\" unit=\"Percent\"><annotation displayName=\"Mem. percent available\" locale=\"en-us\"/></PerformanceCounterConfiguration><PerformanceCounterConfiguration counterSpecifier=\"\\Memory\\UsedMemory\" sampleRate=\"PT15S\" unit=\"Bytes\"><annotation displayName=\"Memory used\" locale=\"en-us\"/></PerformanceCounterConfiguration><PerformanceCounterConfiguration counterSpecifier=\"\\Memory\\PercentUsedMemory\" sampleRate=\"PT15S\" unit=\"Percent\"><annotation displayName=\"Memory percentage\" locale=\"en-us\"/></PerformanceCounterConfiguration><PerformanceCounterConfiguration counterSpecifier=\"\\Memory\\PercentUsedByCache\" sampleRate=\"PT15S\" unit=\"Percent\"><annotation displayName=\"Mem. used by cache\" locale=\"en-us\"/></PerformanceCounterConfiguration><PerformanceCounterConfiguration counterSpecifier=\"\\Processor\\PercentIdleTime\" sampleRate=\"PT15S\" unit=\"Percent\"><annotation displayName=\"CPU idle time\" locale=\"en-us\"/></PerformanceCounterConfiguration><PerformanceCounterConfiguration counterSpecifier=\"\\Processor\\PercentUserTime\" sampleRate=\"PT15S\" unit=\"Percent\"><annotation displayName=\"CPU user time\" locale=\"en-us\"/></PerformanceCounterConfiguration><PerformanceCounterConfiguration counterSpecifier=\"\\Processor\\PercentProcessorTime\" sampleRate=\"PT15S\" unit=\"Percent\"><annotation displayName=\"CPU percentage guest OS\" locale=\"en-us\"/></PerformanceCounterConfiguration><PerformanceCounterConfiguration counterSpecifier=\"\\Processor\\PercentIOWaitTime\" sampleRate=\"PT15S\" unit=\"Percent\"><annotation displayName=\"CPU IO wait time\" locale=\"en-us\"/></PerformanceCounterConfiguration>",
+    "wadperfcounters2-false": "",
+    "wadperfcounters2-true": "<PerformanceCounterConfiguration counterSpecifier=\"\\PhysicalDisk\\BytesPerSecond\" sampleRate=\"PT15S\" unit=\"BytesPerSecond\"><annotation displayName=\"Disk total bytes\" locale=\"en-us\"/></PerformanceCounterConfiguration><PerformanceCounterConfiguration counterSpecifier=\"\\PhysicalDisk\\ReadBytesPerSecond\" sampleRate=\"PT15S\" unit=\"BytesPerSecond\"><annotation displayName=\"Disk read guest OS\" locale=\"en-us\"/></PerformanceCounterConfiguration><PerformanceCounterConfiguration counterSpecifier=\"\\PhysicalDisk\\WriteBytesPerSecond\" sampleRate=\"PT15S\" unit=\"BytesPerSecond\"><annotation displayName=\"Disk write guest OS\" locale=\"en-us\"/></PerformanceCounterConfiguration><PerformanceCounterConfiguration counterSpecifier=\"\\PhysicalDisk\\TransfersPerSecond\" sampleRate=\"PT15S\" unit=\"CountPerSecond\"><annotation displayName=\"Disk transfers\" locale=\"en-us\"/></PerformanceCounterConfiguration><PerformanceCounterConfiguration counterSpecifier=\"\\PhysicalDisk\\ReadsPerSecond\" sampleRate=\"PT15S\" unit=\"CountPerSecond\"><annotation displayName=\"Disk reads\" locale=\"en-us\"/></PerformanceCounterConfiguration><PerformanceCounterConfiguration counterSpecifier=\"\\PhysicalDisk\\WritesPerSecond\" sampleRate=\"PT15S\" unit=\"CountPerSecond\"><annotation displayName=\"Disk writes\" locale=\"en-us\"/></PerformanceCounterConfiguration><PerformanceCounterConfiguration counterSpecifier=\"\\PhysicalDisk\\AverageReadTime\" sampleRate=\"PT15S\" unit=\"Seconds\"><annotation displayName=\"Disk read time\" locale=\"en-us\"/></PerformanceCounterConfiguration><PerformanceCounterConfiguration counterSpecifier=\"\\PhysicalDisk\\AverageWriteTime\" sampleRate=\"PT15S\" unit=\"Seconds\"><annotation displayName=\"Disk write time\" locale=\"en-us\"/></PerformanceCounterConfiguration><PerformanceCounterConfiguration counterSpecifier=\"\\PhysicalDisk\\AverageTransferTime\" sampleRate=\"PT15S\" unit=\"Seconds\"><annotation displayName=\"Disk transfer time\" locale=\"en-us\"/></PerformanceCounterConfiguration><PerformanceCounterConfiguration counterSpecifier=\"\\PhysicalDisk\\AverageDiskQueueLength\" sampleRate=\"PT15S\" unit=\"Count\"><annotation displayName=\"Disk queue length\" locale=\"en-us\"/></PerformanceCounterConfiguration></PerformanceCounters>",
+    "dataStorageAccountPrefixSeed": 97,
+
+    "mastercloudconfig": "#cloud-config\n\n# from 1 files\n# part-001\n\n---\nbootcmd:\n- bash -c \"if [ ! -f /var/lib/sdb-gpt ];then echo DCOS-5890;parted -s /dev/sdb mklabel\n    gpt;touch /var/lib/sdb-gpt;fi\"\ndisk_setup:\n    ephemeral0:\n        layout:\n        - 50\n        - 50\n        overwrite: true\n        table_type: gpt\nfs_setup:\n-   device: ephemeral0.1\n    filesystem: ext4\n    overwrite: true\n-   device: ephemeral0.2\n    filesystem: ext4\n    overwrite: true\nmounts:\n-   - ephemeral0.1\n    - /var/lib/mesos\n-   - ephemeral0.2\n    - /var/lib/docker\n\nruncmd:\n-   - ln\n    - -s\n    - /bin/rm\n    - /usr/bin/rm\n-   - ln\n    - -s\n    - /bin/mkdir\n    - /usr/bin/mkdir\n-   - ln\n    - -s\n    - /bin/tar\n    - /usr/bin/tar\n-   - ln\n    - -s\n    - /bin/ln\n    - /usr/bin/ln\n-   - ln\n    - -s\n    - /bin/cp\n    - /usr/bin/cp\n-   - ln\n    - -s\n    - /bin/systemctl\n    - /usr/bin/systemctl\n-   - ln\n    - -s\n    - /bin/mount\n    - /usr/bin/mount\n-   - ln\n    - -s\n    - /bin/bash\n    - /usr/bin/bash\n-   - ln\n    - -s\n    - /usr/sbin/useradd\n    - /usr/bin/useradd\n-   - systemctl\n    - disable\n    - --now\n    - resolvconf.service\n-   - systemctl\n    - mask\n    - --now\n    - lxc-net.service\n- curl -fLsSv --retry 20 -Y 100000 -y 60 -o /tmp/1.deb https://az837203.vo.msecnd.net/dcos-deps/libipset3_6.29-1_amd64.deb\n- curl -fLsSv --retry 20 -Y 100000 -y 60 -o /tmp/2.deb https://az837203.vo.msecnd.net/dcos-deps/ipset_6.29-1_amd64.deb\n- curl -fLsSv --retry 20 -Y 100000 -y 60 -o /tmp/3.deb https://az837203.vo.msecnd.net/dcos-deps/unzip_6.0-20ubuntu1_amd64.deb\n- curl -fLsSv --retry 20 -Y 100000 -y 60 -o /tmp/4.deb https://az837203.vo.msecnd.net/dcos-deps/libltdl7_2.4.6-0.1_amd64.deb\n- bash -c \"try=1;until dpkg -i /tmp/{1,2,3,4}.deb || ((try>9));do echo retry \\$((try++));sleep\n    \\$((try*try));done\"\n-   - cp\n    - -p\n    - /etc/resolv.conf\n    - /tmp/resolv.conf\n-   - rm\n    - -f\n    - /etc/resolv.conf\n-   - cp\n    - -p\n    - /tmp/resolv.conf\n    - /etc/resolv.conf\n-   - systemctl\n    - start\n    - dcos-docker-install.service\n-   - systemctl\n    - start\n    - dcos-config-writer.service\n-   - systemctl\n    - restart\n    - systemd-journald.service\n-   - systemctl\n    - restart\n    - docker.service\n-   - systemctl\n    - start\n    - dcos-link-env.service\n-   - systemctl\n    - enable\n    - dcos-setup.service\n-   - systemctl\n    - --no-block\n    - start\n    - dcos-setup.service\nwrite_files:\n-   content: 'https://dcosio.azureedge.net/dcos/testing\n\n        '\n    owner: root\n    path: /etc/mesosphere/setup-flags/repository-url\n    permissions: '0644'\n-   content: 'BOOTSTRAP_ID=5b4aa43610c57ee1d60b4aa0751a1fb75824c083\n\n        '\n    owner: root\n    path: /etc/mesosphere/setup-flags/bootstrap-id\n    permissions: '0644'\n-   content: '[\"dcos-config--setup_42bd1d74e9a2b23836bd78919c716c20b98d5a0e\", \"dcos-metadata--setup_42bd1d74e9a2b23836bd78919c716c20b98d5a0e\"]\n\n        '\n    owner: root\n    path: /etc/mesosphere/setup-flags/cluster-packages.json\n    permissions: '0644'\n-   content: '[Journal]\n\n        MaxLevelConsole=warning\n\n        RateLimitInterval=1s\n\n        RateLimitBurst=20000\n\n        '\n    owner: root\n    path: /etc/systemd/journald.conf.d/dcos.conf\n    permissions: '0644'\n-   content: |\n        rexray:\n          loglevel: info\n          modules:\n            default-admin:\n              host: tcp://127.0.0.1:61003\n            default-docker:\n              disabled: true\n    path: /etc/rexray/config.yml\n    permissions: '0644'\n-   content: '[Unit]\n\n        After=network-online.target\n\n        Wants=network-online.target\n\n        [Service]\n\n        Type=oneshot\n\n        Environment=DEBIAN_FRONTEND=noninteractive\n\n        StandardOutput=journal+console\n\n        StandardError=journal+console\n\n        ExecStartPre=/usr/bin/curl -fLsSv --retry 20 -Y 100000 -y 60 -o /tmp/d.deb\n        https://az837203.vo.msecnd.net/dcos-deps/docker-engine_1.11.2-0~xenial_amd64.deb\n\n        ExecStart=/usr/bin/bash -c \"try=1;until dpkg -D3 -i /tmp/d.deb || ((try>9));do\n        echo retry $((try++));sleep $((try*try));done;systemctl --now start docker;systemctl\n        restart docker.socket\"\n\n        '\n    path: /etc/systemd/system/dcos-docker-install.service\n    permissions: '0644'\n-   content: '[Service]\n\n        Restart=always\n\n        StartLimitInterval=0\n\n        RestartSec=15\n\n        ExecStartPre=-/sbin/ip link del docker0\n\n        ExecStart=\n\n        ExecStart=/usr/bin/docker daemon -H fd:// --storage-driver=overlay\n\n        '\n    path: /etc/systemd/system/docker.service.d/execstart.conf\n    permissions: '0644'\n-   content: '[Unit]\n\n        PartOf=docker.service\n\n        [Socket]\n\n        ListenStream=/var/run/docker.sock\n\n        SocketMode=0660\n\n        SocketUser=root\n\n        SocketGroup=docker\n\n        ListenStream=2375\n\n        BindIPv6Only=both\n\n        [Install]\n\n        WantedBy=sockets.target\n\n        '\n    path: /etc/systemd/system/docker.socket\n    permissions: '0644'\n-   content: '[Unit]\n\n        Requires=dcos-setup.service\n\n        After=dcos-setup.service\n\n        [Service]\n\n        Type=oneshot\n\n        EnvironmentFile=/etc/environment\n\n        EnvironmentFile=/opt/mesosphere/environment\n\n        ExecStart=/usr/bin/bash -c \"echo $(detect_ip) $(hostname) > /etc/hosts\"\n\n        '\n    path: /etc/systemd/system/dcos-config-writer.service\n    permissions: '0644'\n-   content: 'MESOS_CLUSTER=dcos-master-ip-xtophmaster-01234567\n\n        '\n    path: /etc/mesosphere/setup-packages/dcos-provider-azure--setup/etc/mesos-master-provider\n-   content: 'ADMINROUTER_ACTIVATE_AUTH_MODULE=false\n\n        '\n    path: /etc/mesosphere/setup-packages/dcos-provider-azure--setup/etc/adminrouter.env\n-   content: '[\"172.16.0.5\", \"172.16.0.6\", \"172.16.0.7\"]\n\n        '\n    path: /etc/mesosphere/setup-packages/dcos-provider-azure--setup/etc/master_list\n-   content: 'EXHIBITOR_BACKEND=AZURE\n\n        AZURE_CONTAINER=dcos-exhibitor\n\n        AZURE_PREFIX=dcos-master-ip-xtophmaster-01234567\n\n        '\n    path: /etc/mesosphere/setup-packages/dcos-provider-azure--setup/etc/exhibitor\n-   content: '{\"uiConfiguration\":{\"plugins\":{\"banner\":{\"enabled\":false,\"backgroundColor\":\"#1E232F\",\"foregroundColor\":\"#FFFFFF\",\"headerTitle\":null,\"headerContent\":null,\"footerContent\":null,\"imagePath\":null,\"dismissible\":null},\"branding\":{\"enabled\":false},\"external-links\":\n        {\"enabled\": false},\n\n\n        \"authentication\":{\"enabled\":false},\n\n\n        \"oauth\":{\"enabled\":false,\"authHost\":\"https://dcos.auth0.com\"},\n\n\n\n        \"tracking\":{\"enabled\":false}}}}\n\n        '\n    path: /etc/mesosphere/setup-packages/dcos-provider-azure--setup/etc/ui-config.json\n-   content: '{}'\n    path: /etc/mesosphere/setup-packages/dcos-provider-azure--setup/pkginfo.json\n-   content: '[Unit]\n\n        Before=dcos.target\n\n        [Service]\n\n        Type=oneshot\n\n        StandardOutput=journal+console\n\n        StandardError=journal+console\n\n        ExecStartPre=/usr/bin/mkdir -p /etc/profile.d\n\n        ExecStart=/usr/bin/ln -sf /opt/mesosphere/environment.export /etc/profile.d/dcos.sh\n\n        '\n    path: /etc/systemd/system/dcos-link-env.service\n    permissions: '0644'\n-   content: '[Unit]\n\n        Description=Pkgpanda: Download DC/OS to this host.\n\n        After=network-online.target\n\n        Wants=network-online.target\n\n        ConditionPathExists=!/opt/mesosphere/\n\n        [Service]\n\n        EnvironmentFile=/etc/mesosphere/setup-flags/bootstrap-id\n\n        Type=oneshot\n\n        StandardOutput=journal+console\n\n        StandardError=journal+console\n\n        ExecStartPre=/usr/bin/curl --keepalive-time 2 -fLsSv --retry 20 -Y 100000\n        -y 60 -o /tmp/bootstrap.tar.xz https://dcosio.azureedge.net/dcos/testing/bootstrap/${BOOTSTRAP_ID}.bootstrap.tar.xz\n\n        ExecStartPre=/usr/bin/mkdir -p /opt/mesosphere\n\n        ExecStart=/usr/bin/tar -axf /tmp/bootstrap.tar.xz -C /opt/mesosphere\n\n        ExecStartPost=-/usr/bin/rm -f /tmp/bootstrap.tar.xz\n\n        '\n    path: /etc/systemd/system/dcos-download.service\n    permissions: '0644'\n-   content: '[Unit]\n\n        Description=Pkgpanda: Specialize DC/OS for this host.\n\n        Requires=dcos-download.service\n\n        After=dcos-download.service\n\n        [Service]\n\n        Type=oneshot\n\n        StandardOutput=journal+console\n\n        StandardError=journal+console\n\n        EnvironmentFile=/opt/mesosphere/environment\n\n        ExecStart=/opt/mesosphere/bin/pkgpanda setup --no-block-systemd\n\n        [Install]\n\n        WantedBy=multi-user.target\n\n        '\n    path: /etc/systemd/system/dcos-setup.service\n    permissions: '0644'\n-   content: ''\n    path: /etc/mesosphere/roles/master\n-   content: ''\n    path: /etc/mesosphere/roles/azure_master\n-   content: ''\n    path: /etc/mesosphere/roles/azure\n-   path: /etc/mesosphere/setup-packages/dcos-provider-azure--setup/etc/exhibitor.properties   \n    content: |\n",
+    "privateconfig": "#cloud-config\n\n# from 1 files\n# part-001\n\n---\nbootcmd:\n- bash -c \"if [ ! -f /var/lib/sdb-gpt ];then echo DCOS-5890;parted -s /dev/sdb mklabel\n    gpt;touch /var/lib/sdb-gpt;fi\"\ndisk_setup:\n    ephemeral0:\n        layout:\n        - 50\n        - 50\n        overwrite: true\n        table_type: gpt\nfs_setup:\n-   device: ephemeral0.1\n    filesystem: ext4\n    overwrite: true\n-   device: ephemeral0.2\n    filesystem: ext4\n    overwrite: true\nmounts:\n-   - ephemeral0.1\n    - /var/lib/mesos\n-   - ephemeral0.2\n    - /var/lib/docker\n    \nruncmd:\n-   - ln\n    - -s\n    - /bin/rm\n    - /usr/bin/rm\n-   - ln\n    - -s\n    - /bin/mkdir\n    - /usr/bin/mkdir\n-   - ln\n    - -s\n    - /bin/tar\n    - /usr/bin/tar\n-   - ln\n    - -s\n    - /bin/ln\n    - /usr/bin/ln\n-   - ln\n    - -s\n    - /bin/cp\n    - /usr/bin/cp\n-   - ln\n    - -s\n    - /bin/systemctl\n    - /usr/bin/systemctl\n-   - ln\n    - -s\n    - /bin/mount\n    - /usr/bin/mount\n-   - ln\n    - -s\n    - /bin/bash\n    - /usr/bin/bash\n-   - ln\n    - -s\n    - /usr/sbin/useradd\n    - /usr/bin/useradd\n-   - systemctl\n    - disable\n    - --now\n    - resolvconf.service\n-   - systemctl\n    - mask\n    - --now\n    - lxc-net.service\n- curl -fLsSv --retry 20 -Y 100000 -y 60 -o /tmp/1.deb https://az837203.vo.msecnd.net/dcos-deps/libipset3_6.29-1_amd64.deb\n- curl -fLsSv --retry 20 -Y 100000 -y 60 -o /tmp/2.deb https://az837203.vo.msecnd.net/dcos-deps/ipset_6.29-1_amd64.deb\n- curl -fLsSv --retry 20 -Y 100000 -y 60 -o /tmp/3.deb https://az837203.vo.msecnd.net/dcos-deps/unzip_6.0-20ubuntu1_amd64.deb\n- curl -fLsSv --retry 20 -Y 100000 -y 60 -o /tmp/4.deb https://az837203.vo.msecnd.net/dcos-deps/libltdl7_2.4.6-0.1_amd64.deb\n- bash -c \"try=1;until dpkg -i /tmp/{1,2,3,4}.deb || ((try>9));do echo retry \\$((try++));sleep\n    \\$((try*try));done\"\n-   - cp\n    - -p\n    - /etc/resolv.conf\n    - /tmp/resolv.conf\n-   - rm\n    - -f\n    - /etc/resolv.conf\n-   - cp\n    - -p\n    - /tmp/resolv.conf\n    - /etc/resolv.conf\n-   - systemctl\n    - start\n    - dcos-docker-install.service\n-   - systemctl\n    - start\n    - dcos-config-writer.service\n-   - systemctl\n    - restart\n    - systemd-journald.service\n-   - systemctl\n    - restart\n    - docker.service\n-   - systemctl\n    - start\n    - dcos-link-env.service\n-   - systemctl\n    - enable\n    - dcos-setup.service\n-   - systemctl\n    - --no-block\n    - start\n    - dcos-setup.service\nwrite_files:\n-   content: 'https://dcosio.azureedge.net/dcos/testing\n\n        '\n    owner: root\n    path: /etc/mesosphere/setup-flags/repository-url\n    permissions: '0644'\n-   content: 'BOOTSTRAP_ID=5b4aa43610c57ee1d60b4aa0751a1fb75824c083\n\n        '\n    owner: root\n    path: /etc/mesosphere/setup-flags/bootstrap-id\n    permissions: '0644'\n-   content: '[\"dcos-config--setup_42bd1d74e9a2b23836bd78919c716c20b98d5a0e\", \"dcos-metadata--setup_42bd1d74e9a2b23836bd78919c716c20b98d5a0e\"]\n\n        '\n    owner: root\n    path: /etc/mesosphere/setup-flags/cluster-packages.json\n    permissions: '0644'\n-   content: '[Journal]\n\n        MaxLevelConsole=warning\n\n        RateLimitInterval=1s\n\n        RateLimitBurst=20000\n\n        '\n    owner: root\n    path: /etc/systemd/journald.conf.d/dcos.conf\n    permissions: '0644'\n-   content: |\n        rexray:\n          loglevel: info\n          modules:\n            default-admin:\n              host: tcp://127.0.0.1:61003\n            default-docker:\n              disabled: true\n    path: /etc/rexray/config.yml\n    permissions: '0644'\n-   content: '[Unit]\n\n        After=network-online.target\n\n        Wants=network-online.target\n\n        [Service]\n\n        Type=oneshot\n\n        Environment=DEBIAN_FRONTEND=noninteractive\n\n        StandardOutput=journal+console\n\n        StandardError=journal+console\n\n        ExecStartPre=/usr/bin/curl -fLsSv --retry 20 -Y 100000 -y 60 -o /tmp/d.deb\n        https://az837203.vo.msecnd.net/dcos-deps/docker-engine_1.11.2-0~xenial_amd64.deb\n\n        ExecStart=/usr/bin/bash -c \"try=1;until dpkg -D3 -i /tmp/d.deb || ((try>9));do\n        echo retry $((try++));sleep $((try*try));done;systemctl --now start docker;systemctl\n        restart docker.socket\"\n\n        '\n    path: /etc/systemd/system/dcos-docker-install.service\n    permissions: '0644'\n-   content: '[Service]\n\n        Restart=always\n\n        StartLimitInterval=0\n\n        RestartSec=15\n\n        ExecStartPre=-/sbin/ip link del docker0\n\n        ExecStart=\n\n        ExecStart=/usr/bin/docker daemon -H fd:// --storage-driver=overlay\n\n        '\n    path: /etc/systemd/system/docker.service.d/execstart.conf\n    permissions: '0644'\n-   content: '[Unit]\n\n        PartOf=docker.service\n\n        [Socket]\n\n        ListenStream=/var/run/docker.sock\n\n        SocketMode=0660\n\n        SocketUser=root\n\n        SocketGroup=docker\n\n        ListenStream=2375\n\n        BindIPv6Only=both\n\n        [Install]\n\n        WantedBy=sockets.target\n\n        '\n    path: /etc/systemd/system/docker.socket\n    permissions: '0644'\n-   content: '[Unit]\n\n        Requires=dcos-setup.service\n\n        After=dcos-setup.service\n\n        [Service]\n\n        Type=oneshot\n\n        EnvironmentFile=/etc/environment\n\n        EnvironmentFile=/opt/mesosphere/environment\n\n        ExecStart=/usr/bin/bash -c \"echo $(detect_ip) $(hostname) > /etc/hosts\"\n\n        '\n    path: /etc/systemd/system/dcos-config-writer.service\n    permissions: '0644'\n-   content: 'MESOS_CLUSTER=dcos-master-ip-xtophmaster-01234567\n\n        '\n    path: /etc/mesosphere/setup-packages/dcos-provider-azure--setup/etc/mesos-master-provider\n-   content: 'ADMINROUTER_ACTIVATE_AUTH_MODULE=false\n\n        '\n    path: /etc/mesosphere/setup-packages/dcos-provider-azure--setup/etc/adminrouter.env\n-   content: '[\"172.16.0.5\", \"172.16.0.6\", \"172.16.0.7\"]\n\n        '\n    path: /etc/mesosphere/setup-packages/dcos-provider-azure--setup/etc/master_list\n-   content: 'EXHIBITOR_BACKEND=AZURE\n\n        AZURE_CONTAINER=dcos-exhibitor\n\n        AZURE_PREFIX=dcos-master-ip-xtophmaster-01234567\n\n        '\n    path: /etc/mesosphere/setup-packages/dcos-provider-azure--setup/etc/exhibitor\n-   content: '{\"uiConfiguration\":{\"plugins\":{\"banner\":{\"enabled\":false,\"backgroundColor\":\"#1E232F\",\"foregroundColor\":\"#FFFFFF\",\"headerTitle\":null,\"headerContent\":null,\"footerContent\":null,\"imagePath\":null,\"dismissible\":null},\"branding\":{\"enabled\":false},\"external-links\":\n        {\"enabled\": false},\n\n\n        \"authentication\":{\"enabled\":false},\n\n\n        \"oauth\":{\"enabled\":false,\"authHost\":\"https://dcos.auth0.com\"},\n\n\n\n        \"tracking\":{\"enabled\":false}}}}\n\n        '\n    path: /etc/mesosphere/setup-packages/dcos-provider-azure--setup/etc/ui-config.json\n-   content: '{}'\n    path: /etc/mesosphere/setup-packages/dcos-provider-azure--setup/pkginfo.json\n-   content: '[Unit]\n\n        Before=dcos.target\n\n        [Service]\n\n        Type=oneshot\n\n        StandardOutput=journal+console\n\n        StandardError=journal+console\n\n        ExecStartPre=/usr/bin/mkdir -p /etc/profile.d\n\n        ExecStart=/usr/bin/ln -sf /opt/mesosphere/environment.export /etc/profile.d/dcos.sh\n\n        '\n    path: /etc/systemd/system/dcos-link-env.service\n    permissions: '0644'\n-   content: '[Unit]\n\n        Description=Pkgpanda: Download DC/OS to this host.\n\n        After=network-online.target\n\n        Wants=network-online.target\n\n        ConditionPathExists=!/opt/mesosphere/\n\n        [Service]\n\n        EnvironmentFile=/etc/mesosphere/setup-flags/bootstrap-id\n\n        Type=oneshot\n\n        StandardOutput=journal+console\n\n        StandardError=journal+console\n\n        ExecStartPre=/usr/bin/curl --keepalive-time 2 -fLsSv --retry 20 -Y 100000\n        -y 60 -o /tmp/bootstrap.tar.xz https://dcosio.azureedge.net/dcos/testing/bootstrap/${BOOTSTRAP_ID}.bootstrap.tar.xz\n\n        ExecStartPre=/usr/bin/mkdir -p /opt/mesosphere\n\n        ExecStart=/usr/bin/tar -axf /tmp/bootstrap.tar.xz -C /opt/mesosphere\n\n        ExecStartPost=-/usr/bin/rm -f /tmp/bootstrap.tar.xz\n\n        '\n    path: /etc/systemd/system/dcos-download.service\n    permissions: '0644'\n-   content: '[Unit]\n\n        Description=Pkgpanda: Specialize DC/OS for this host.\n\n        Requires=dcos-download.service\n\n        After=dcos-download.service\n\n        [Service]\n\n        Type=oneshot\n\n        StandardOutput=journal+console\n\n        StandardError=journal+console\n\n        EnvironmentFile=/opt/mesosphere/environment\n\n        ExecStart=/opt/mesosphere/bin/pkgpanda setup --no-block-systemd\n\n        [Install]\n\n        WantedBy=multi-user.target\n\n        '\n    path: /etc/systemd/system/dcos-setup.service\n    permissions: '0644'\n-   content: ''\n    path: /etc/mesosphere/roles/slave\n-   content: ''\n    path: /etc/mesosphere/roles/azure\n-   path: /etc/mesosphere/setup-packages/dcos-provider-azure--setup/etc/exhibitor.properties   \n    content: |",
+    "diskconfig": "#cloud-config\n\nbootcmd:\n- bash -c \"if [ ! -f /var/lib/sdb-gpt ];then echo DCOS-5890;parted -s /dev/sdb mklabel\n    gpt;touch /var/lib/sdb-gpt;fi\"\ndisk_setup:\n    /dev/sdc:\n        layout: true\n        overwrite: true\n        table_type: gpt\n    /dev/sdd:\n        layout: true\n        overwrite: true\n        table_type: gpt\n    ephemeral0:\n        layout:\n        - 50\n        - 50\n        overwrite: true\n        table_type: gpt\nfs_setup:\n-   device: ephemeral0.1\n    filesystem: ext4\n    overwrite: true\n-   device: ephemeral0.2\n    filesystem: ext4\n    overwrite: true\nmounts:\n-   - ephemeral0.1\n    - /var/lib/mesos\n-   - ephemeral0.2\n    - /var/lib/docker\n\npackages:\n- mdadm\n\nruncmd:\n-   - ln\n    - -s\n    - /bin/rm\n    - /usr/bin/rm\n-   - ln\n    - -s\n    - /bin/mkdir\n    - /usr/bin/mkdir\n-   - ln\n    - -s\n    - /bin/tar\n    - /usr/bin/tar\n-   - ln\n    - -s\n    - /bin/ln\n    - /usr/bin/ln\n-   - ln\n    - -s\n    - /bin/cp\n    - /usr/bin/cp\n-   - ln\n    - -s\n    - /bin/systemctl\n    - /usr/bin/systemctl\n-   - ln\n    - -s\n    - /bin/mount\n    - /usr/bin/mount\n-   - ln\n    - -s\n    - /bin/bash\n    - /usr/bin/bash\n-   - ln\n    - -s\n    - /usr/sbin/useradd\n    - /usr/bin/useradd\n-   - mkdir\n    - -p\n    - /dcos/volume0\n-   - mdadm\n    - --create\n    - /dev/md127\n    - --level=0\n    - --raid-devices\n    - 2\n    - /dev/sdc1\n    - /dev/sdd1\n-   - mkfs\n    - -t\n    - ext4\n    - /dev/md127\n- echo UUID=$(sudo /sbin/blkid | grep md127 | cut -d\\\" -f 2) /dcos/volume0 ext4 defaults 0 2 >> /etc/fstab\n-   - mount\n    - -a\n-   - chmod\n    - 777\n    - /dcos/volume0\n-   - systemctl\n    - disable\n    - --now\n    - resolvconf.service\n-   - systemctl\n    - mask\n    - --now\n    - lxc-net.service\n- curl -fLsSv --retry 20 -Y 100000 -y 60 -o /tmp/1.deb https://az837203.vo.msecnd.net/dcos-deps/libipset3_6.29-1_amd64.deb\n- curl -fLsSv --retry 20 -Y 100000 -y 60 -o /tmp/2.deb https://az837203.vo.msecnd.net/dcos-deps/ipset_6.29-1_amd64.deb\n- curl -fLsSv --retry 20 -Y 100000 -y 60 -o /tmp/3.deb https://az837203.vo.msecnd.net/dcos-deps/unzip_6.0-20ubuntu1_amd64.deb\n- curl -fLsSv --retry 20 -Y 100000 -y 60 -o /tmp/4.deb https://az837203.vo.msecnd.net/dcos-deps/libltdl7_2.4.6-0.1_amd64.deb\n- bash -c \"try=1;until dpkg -i /tmp/{1,2,3,4}.deb || ((try>9));do echo retry \\$((try++));sleep\n    \\$((try*try));done\"\n-   - cp\n    - -p\n    - /etc/resolv.conf\n    - /tmp/resolv.conf\n-   - rm\n    - -f\n    - /etc/resolv.conf\n-   - cp\n    - -p\n    - /tmp/resolv.conf\n    - /etc/resolv.conf\n-   - systemctl\n    - start\n    - dcos-docker-install.service\n-   - systemctl\n    - start\n    - dcos-config-writer.service\n-   - systemctl\n    - restart\n    - systemd-journald.service\n-   - systemctl\n    - restart\n    - docker.service\n-   - systemctl\n    - start\n    - dcos-link-env.service\n-   - systemctl\n    - enable\n    - dcos-setup.service\n-   - systemctl\n    - --no-block\n    - start\n    - dcos-setup.service\nwrite_files:\n-   content: 'https://dcosio.azureedge.net/dcos/testing\n\n        '\n    owner: root\n    path: /etc/mesosphere/setup-flags/repository-url\n    permissions: '0644'\n-   content: 'BOOTSTRAP_ID=5b4aa43610c57ee1d60b4aa0751a1fb75824c083\n\n        '\n    owner: root\n    path: /etc/mesosphere/setup-flags/bootstrap-id\n    permissions: '0644'\n-   content: '[\"dcos-config--setup_42bd1d74e9a2b23836bd78919c716c20b98d5a0e\", \"dcos-metadata--setup_42bd1d74e9a2b23836bd78919c716c20b98d5a0e\"]\n\n        '\n    owner: root\n    path: /etc/mesosphere/setup-flags/cluster-packages.json\n    permissions: '0644'\n-   content: '[Journal]\n\n        MaxLevelConsole=warning\n\n        RateLimitInterval=1s\n\n        RateLimitBurst=20000\n\n        '\n    owner: root\n    path: /etc/systemd/journald.conf.d/dcos.conf\n    permissions: '0644'\n-   content: |\n        rexray:\n          loglevel: info\n          modules:\n            default-admin:\n              host: tcp://127.0.0.1:61003\n            default-docker:\n              disabled: true\n    path: /etc/rexray/config.yml\n    permissions: '0644'\n-   content: '[Unit]\n\n        After=network-online.target\n\n        Wants=network-online.target\n\n        [Service]\n\n        Type=oneshot\n\n        Environment=DEBIAN_FRONTEND=noninteractive\n\n        StandardOutput=journal+console\n\n        StandardError=journal+console\n\n        ExecStartPre=/usr/bin/curl -fLsSv --retry 20 -Y 100000 -y 60 -o /tmp/d.deb\n        https://az837203.vo.msecnd.net/dcos-deps/docker-engine_1.11.2-0~xenial_amd64.deb\n\n        ExecStart=/usr/bin/bash -c \"try=1;until dpkg -D3 -i /tmp/d.deb || ((try>9));do\n        echo retry $((try++));sleep $((try*try));done;systemctl --now start docker;systemctl\n        restart docker.socket\"\n\n        '\n    path: /etc/systemd/system/dcos-docker-install.service\n    permissions: '0644'\n-   content: '[Service]\n\n        Restart=always\n\n        StartLimitInterval=0\n\n        RestartSec=15\n\n        ExecStartPre=-/sbin/ip link del docker0\n\n        ExecStart=\n\n        ExecStart=/usr/bin/docker daemon -H fd:// --storage-driver=overlay\n\n        '\n    path: /etc/systemd/system/docker.service.d/execstart.conf\n    permissions: '0644'\n-   content: '[Unit]\n\n        PartOf=docker.service\n\n        [Socket]\n\n        ListenStream=/var/run/docker.sock\n\n        SocketMode=0660\n\n        SocketUser=root\n\n        SocketGroup=docker\n\n        ListenStream=2375\n\n        BindIPv6Only=both\n\n        [Install]\n\n        WantedBy=sockets.target\n\n        '\n    path: /etc/systemd/system/docker.socket\n    permissions: '0644'\n-   content: '[Unit]\n\n        Requires=dcos-setup.service\n\n        After=dcos-setup.service\n\n        [Service]\n\n        Type=oneshot\n\n        EnvironmentFile=/etc/environment\n\n        EnvironmentFile=/opt/mesosphere/environment\n\n        ExecStart=/usr/bin/bash -c \"echo $(detect_ip) $(hostname) > /etc/hosts\"\n\n        '\n    path: /etc/systemd/system/dcos-config-writer.service\n    permissions: '0644'\n-   content: 'MESOS_CLUSTER=dcos-master-ip-xtophmaster-01234567\n\n        '\n    path: /etc/mesosphere/setup-packages/dcos-provider-azure--setup/etc/mesos-master-provider\n-   content: 'ADMINROUTER_ACTIVATE_AUTH_MODULE=false\n\n        '\n    path: /etc/mesosphere/setup-packages/dcos-provider-azure--setup/etc/adminrouter.env\n-   content: '[\"172.16.0.5\", \"172.16.0.6\", \"172.16.0.7\"]\n\n        '\n    path: /etc/mesosphere/setup-packages/dcos-provider-azure--setup/etc/master_list\n-   content: 'EXHIBITOR_BACKEND=AZURE\n\n        AZURE_CONTAINER=dcos-exhibitor\n\n        AZURE_PREFIX=dcos-master-ip-xtophmaster-01234567\n\n        '\n    path: /etc/mesosphere/setup-packages/dcos-provider-azure--setup/etc/exhibitor\n-   content: '{\"uiConfiguration\":{\"plugins\":{\"banner\":{\"enabled\":false,\"backgroundColor\":\"#1E232F\",\"foregroundColor\":\"#FFFFFF\",\"headerTitle\":null,\"headerContent\":null,\"footerContent\":null,\"imagePath\":null,\"dismissible\":null},\"branding\":{\"enabled\":false},\"external-links\":\n        {\"enabled\": false},\n\n\n        \"authentication\":{\"enabled\":false},\n\n\n        \"oauth\":{\"enabled\":false,\"authHost\":\"https://dcos.auth0.com\"},\n\n\n\n        \"tracking\":{\"enabled\":false}}}}\n\n        '\n    path: /etc/mesosphere/setup-packages/dcos-provider-azure--setup/etc/ui-config.json\n-   content: '{}'\n    path: /etc/mesosphere/setup-packages/dcos-provider-azure--setup/pkginfo.json\n-   content: '[Unit]\n\n        Before=dcos.target\n\n        [Service]\n\n        Type=oneshot\n\n        StandardOutput=journal+console\n\n        StandardError=journal+console\n\n        ExecStartPre=/usr/bin/mkdir -p /etc/profile.d\n\n        ExecStart=/usr/bin/ln -sf /opt/mesosphere/environment.export /etc/profile.d/dcos.sh\n\n        '\n    path: /etc/systemd/system/dcos-link-env.service\n    permissions: '0644'\n-   content: '[Unit]\n\n        Description=Pkgpanda: Download DC/OS to this host.\n\n        After=network-online.target\n\n        Wants=network-online.target\n\n        ConditionPathExists=!/opt/mesosphere/\n\n        [Service]\n\n        EnvironmentFile=/etc/mesosphere/setup-flags/bootstrap-id\n\n        Type=oneshot\n\n        StandardOutput=journal+console\n\n        StandardError=journal+console\n\n        ExecStartPre=/usr/bin/curl --keepalive-time 2 -fLsSv --retry 20 -Y 100000\n        -y 60 -o /tmp/bootstrap.tar.xz https://dcosio.azureedge.net/dcos/testing/bootstrap/${BOOTSTRAP_ID}.bootstrap.tar.xz\n\n        ExecStartPre=/usr/bin/mkdir -p /opt/mesosphere\n\n        ExecStart=/usr/bin/tar -axf /tmp/bootstrap.tar.xz -C /opt/mesosphere\n\n        ExecStartPost=-/usr/bin/rm -f /tmp/bootstrap.tar.xz\n\n        '\n    path: /etc/systemd/system/dcos-download.service\n    permissions: '0644'\n-   content: '[Unit]\n\n        Description=Pkgpanda: Specialize DC/OS for this host.\n\n        Requires=dcos-download.service\n\n        After=dcos-download.service\n\n        [Service]\n\n        Type=oneshot\n\n        StandardOutput=journal+console\n\n        StandardError=journal+console\n\n        EnvironmentFile=/opt/mesosphere/environment\n\n        ExecStart=/opt/mesosphere/bin/pkgpanda setup --no-block-systemd\n\n        [Install]\n\n        WantedBy=multi-user.target\n\n        '\n    path: /etc/systemd/system/dcos-setup.service\n    permissions: '0644'\n-   content: ''\n    path: /etc/mesosphere/roles/slave\n-   content: ''\n    path: /etc/mesosphere/roles/azure\n-   path: /var/lib/dcos/mesos-slave-common\n    content: MESOS_ATTRIBUTES=HasDisk:true\n-   path: /etc/mesosphere/setup-packages/dcos-provider-azure--setup/etc/exhibitor.properties   \n    content: |",
+    "publiccloudconfig": "#cloud-config\n\n# from 1 files\n# part-001\n\n---\nbootcmd:\n- bash -c \"if [ ! -f /var/lib/sdb-gpt ];then echo DCOS-5890;parted -s /dev/sdb mklabel\n    gpt;touch /var/lib/sdb-gpt;fi\"\ndisk_setup:\n    ephemeral0:\n        layout:\n        - 50\n        - 50\n        overwrite: true\n        table_type: gpt\nfs_setup:\n-   device: ephemeral0.1\n    filesystem: ext4\n    overwrite: true\n-   device: ephemeral0.2\n    filesystem: ext4\n    overwrite: true\nmounts:\n-   - ephemeral0.1\n    - /var/lib/mesos\n-   - ephemeral0.2\n    - /var/lib/docker\n    \nruncmd:\n-   - ln\n    - -s\n    - /bin/rm\n    - /usr/bin/rm\n-   - ln\n    - -s\n    - /bin/mkdir\n    - /usr/bin/mkdir\n-   - ln\n    - -s\n    - /bin/tar\n    - /usr/bin/tar\n-   - ln\n    - -s\n    - /bin/ln\n    - /usr/bin/ln\n-   - ln\n    - -s\n    - /bin/cp\n    - /usr/bin/cp\n-   - ln\n    - -s\n    - /bin/systemctl\n    - /usr/bin/systemctl\n-   - ln\n    - -s\n    - /bin/mount\n    - /usr/bin/mount\n-   - ln\n    - -s\n    - /bin/bash\n    - /usr/bin/bash\n-   - ln\n    - -s\n    - /usr/sbin/useradd\n    - /usr/bin/useradd\n-   - systemctl\n    - disable\n    - --now\n    - resolvconf.service\n-   - systemctl\n    - mask\n    - --now\n    - lxc-net.service\n- curl -fLsSv --retry 20 -Y 100000 -y 60 -o /tmp/1.deb https://az837203.vo.msecnd.net/dcos-deps/libipset3_6.29-1_amd64.deb\n- curl -fLsSv --retry 20 -Y 100000 -y 60 -o /tmp/2.deb https://az837203.vo.msecnd.net/dcos-deps/ipset_6.29-1_amd64.deb\n- curl -fLsSv --retry 20 -Y 100000 -y 60 -o /tmp/3.deb https://az837203.vo.msecnd.net/dcos-deps/unzip_6.0-20ubuntu1_amd64.deb\n- curl -fLsSv --retry 20 -Y 100000 -y 60 -o /tmp/4.deb https://az837203.vo.msecnd.net/dcos-deps/libltdl7_2.4.6-0.1_amd64.deb\n- bash -c \"try=1;until dpkg -i /tmp/{1,2,3,4}.deb || ((try>9));do echo retry \\$((try++));sleep\n    \\$((try*try));done\"\n-   - cp\n    - -p\n    - /etc/resolv.conf\n    - /tmp/resolv.conf\n-   - rm\n    - -f\n    - /etc/resolv.conf\n-   - cp\n    - -p\n    - /tmp/resolv.conf\n    - /etc/resolv.conf\n-   - systemctl\n    - start\n    - dcos-docker-install.service\n-   - systemctl\n    - start\n    - dcos-config-writer.service\n-   - systemctl\n    - restart\n    - systemd-journald.service\n-   - systemctl\n    - restart\n    - docker.service\n-   - systemctl\n    - start\n    - dcos-link-env.service\n-   - systemctl\n    - enable\n    - dcos-setup.service\n-   - systemctl\n    - --no-block\n    - start\n    - dcos-setup.service\nwrite_files:\n-   content: 'https://dcosio.azureedge.net/dcos/testing\n\n        '\n    owner: root\n    path: /etc/mesosphere/setup-flags/repository-url\n    permissions: '0644'\n-   content: 'BOOTSTRAP_ID=5b4aa43610c57ee1d60b4aa0751a1fb75824c083\n\n        '\n    owner: root\n    path: /etc/mesosphere/setup-flags/bootstrap-id\n    permissions: '0644'\n-   content: '[\"dcos-config--setup_42bd1d74e9a2b23836bd78919c716c20b98d5a0e\", \"dcos-metadata--setup_42bd1d74e9a2b23836bd78919c716c20b98d5a0e\"]\n\n        '\n    owner: root\n    path: /etc/mesosphere/setup-flags/cluster-packages.json\n    permissions: '0644'\n-   content: '[Journal]\n\n        MaxLevelConsole=warning\n\n        RateLimitInterval=1s\n\n        RateLimitBurst=20000\n\n        '\n    owner: root\n    path: /etc/systemd/journald.conf.d/dcos.conf\n    permissions: '0644'\n-   content: |\n        rexray:\n          loglevel: info\n          modules:\n            default-admin:\n              host: tcp://127.0.0.1:61003\n            default-docker:\n              disabled: true\n    path: /etc/rexray/config.yml\n    permissions: '0644'\n-   content: '[Unit]\n\n        After=network-online.target\n\n        Wants=network-online.target\n\n        [Service]\n\n        Type=oneshot\n\n        Environment=DEBIAN_FRONTEND=noninteractive\n\n        StandardOutput=journal+console\n\n        StandardError=journal+console\n\n        ExecStartPre=/usr/bin/curl -fLsSv --retry 20 -Y 100000 -y 60 -o /tmp/d.deb\n        https://az837203.vo.msecnd.net/dcos-deps/docker-engine_1.11.2-0~xenial_amd64.deb\n\n        ExecStart=/usr/bin/bash -c \"try=1;until dpkg -D3 -i /tmp/d.deb || ((try>9));do\n        echo retry $((try++));sleep $((try*try));done;systemctl --now start docker;systemctl\n        restart docker.socket\"\n\n        '\n    path: /etc/systemd/system/dcos-docker-install.service\n    permissions: '0644'\n-   content: '[Service]\n\n        Restart=always\n\n        StartLimitInterval=0\n\n        RestartSec=15\n\n        ExecStartPre=-/sbin/ip link del docker0\n\n        ExecStart=\n\n        ExecStart=/usr/bin/docker daemon -H fd:// --storage-driver=overlay\n\n        '\n    path: /etc/systemd/system/docker.service.d/execstart.conf\n    permissions: '0644'\n-   content: '[Unit]\n\n        PartOf=docker.service\n\n        [Socket]\n\n        ListenStream=/var/run/docker.sock\n\n        SocketMode=0660\n\n        SocketUser=root\n\n        SocketGroup=docker\n\n        ListenStream=2375\n\n        BindIPv6Only=both\n\n        [Install]\n\n        WantedBy=sockets.target\n\n        '\n    path: /etc/systemd/system/docker.socket\n    permissions: '0644'\n-   content: '[Unit]\n\n        Requires=dcos-setup.service\n\n        After=dcos-setup.service\n\n        [Service]\n\n        Type=oneshot\n\n        EnvironmentFile=/etc/environment\n\n        EnvironmentFile=/opt/mesosphere/environment\n\n        ExecStart=/usr/bin/bash -c \"echo $(detect_ip) $(hostname) > /etc/hosts\"\n\n        '\n    path: /etc/systemd/system/dcos-config-writer.service\n    permissions: '0644'\n-   content: 'MESOS_CLUSTER=dcos-master-ip-xtophmaster-01234567\n\n        '\n    path: /etc/mesosphere/setup-packages/dcos-provider-azure--setup/etc/mesos-master-provider\n-   content: 'ADMINROUTER_ACTIVATE_AUTH_MODULE=false\n\n        '\n    path: /etc/mesosphere/setup-packages/dcos-provider-azure--setup/etc/adminrouter.env\n-   content: '[\"172.16.0.5\", \"172.16.0.6\", \"172.16.0.7\"]\n\n        '\n    path: /etc/mesosphere/setup-packages/dcos-provider-azure--setup/etc/master_list\n-   content: 'EXHIBITOR_BACKEND=AZURE\n\n        AZURE_CONTAINER=dcos-exhibitor\n\n        AZURE_PREFIX=dcos-master-ip-xtophmaster-01234567\n\n        '\n    path: /etc/mesosphere/setup-packages/dcos-provider-azure--setup/etc/exhibitor\n-   content: '{\"uiConfiguration\":{\"plugins\":{\"banner\":{\"enabled\":false,\"backgroundColor\":\"#1E232F\",\"foregroundColor\":\"#FFFFFF\",\"headerTitle\":null,\"headerContent\":null,\"footerContent\":null,\"imagePath\":null,\"dismissible\":null},\"branding\":{\"enabled\":false},\"external-links\":\n        {\"enabled\": false},\n\n\n        \"authentication\":{\"enabled\":false},\n\n\n        \"oauth\":{\"enabled\":false,\"authHost\":\"https://dcos.auth0.com\"},\n\n\n\n        \"tracking\":{\"enabled\":false}}}}\n\n        '\n    path: /etc/mesosphere/setup-packages/dcos-provider-azure--setup/etc/ui-config.json\n-   content: '{}'\n    path: /etc/mesosphere/setup-packages/dcos-provider-azure--setup/pkginfo.json\n-   content: '[Unit]\n\n        Before=dcos.target\n\n        [Service]\n\n        Type=oneshot\n\n        StandardOutput=journal+console\n\n        StandardError=journal+console\n\n        ExecStartPre=/usr/bin/mkdir -p /etc/profile.d\n\n        ExecStart=/usr/bin/ln -sf /opt/mesosphere/environment.export /etc/profile.d/dcos.sh\n\n        '\n    path: /etc/systemd/system/dcos-link-env.service\n    permissions: '0644'\n-   content: '[Unit]\n\n        Description=Pkgpanda: Download DC/OS to this host.\n\n        After=network-online.target\n\n        Wants=network-online.target\n\n        ConditionPathExists=!/opt/mesosphere/\n\n        [Service]\n\n        EnvironmentFile=/etc/mesosphere/setup-flags/bootstrap-id\n\n        Type=oneshot\n\n        StandardOutput=journal+console\n\n        StandardError=journal+console\n\n        ExecStartPre=/usr/bin/curl --keepalive-time 2 -fLsSv --retry 20 -Y 100000\n        -y 60 -o /tmp/bootstrap.tar.xz https://dcosio.azureedge.net/dcos/testing/bootstrap/${BOOTSTRAP_ID}.bootstrap.tar.xz\n\n        ExecStartPre=/usr/bin/mkdir -p /opt/mesosphere\n\n        ExecStart=/usr/bin/tar -axf /tmp/bootstrap.tar.xz -C /opt/mesosphere\n\n        ExecStartPost=-/usr/bin/rm -f /tmp/bootstrap.tar.xz\n\n        '\n    path: /etc/systemd/system/dcos-download.service\n    permissions: '0644'\n-   content: '[Unit]\n\n        Description=Pkgpanda: Specialize DC/OS for this host.\n\n        Requires=dcos-download.service\n\n        After=dcos-download.service\n\n        [Service]\n\n        Type=oneshot\n\n        StandardOutput=journal+console\n\n        StandardError=journal+console\n\n        EnvironmentFile=/opt/mesosphere/environment\n\n        ExecStart=/opt/mesosphere/bin/pkgpanda setup --no-block-systemd\n\n        [Install]\n\n        WantedBy=multi-user.target\n\n        '\n    path: /etc/systemd/system/dcos-setup.service\n    permissions: '0644'\n-   content: ''\n    path: /etc/mesosphere/roles/slave_public\n-   content: ''\n    path: /etc/mesosphere/roles/azure\n-   path: /etc/mesosphere/setup-packages/dcos-provider-azure--setup/etc/exhibitor.properties   \n    content: |"
+
+  },
+  "resources": [
+    {
+      "apiVersion": "[variables('apiVersionStorage')]",
+      "dependsOn": [
+        "[concat('Microsoft.Network/publicIPAddresses/', variables('masterPublicIPAddressName'))]"
+      ],
+      "location": "[variables('storageLocation')]",
+      "name": "[variables('masterStorageAccountName')]",
+      "properties": {
+        "accountType": "[variables('vmSizesMap')[variables('masterVMSize')].storageAccountType]"
+      },
+      "type": "Microsoft.Storage/storageAccounts"
+    },
+    {
+      "apiVersion": "[variables('apiVersionStorage')]",
+      "dependsOn": [
+        "[concat('Microsoft.Network/publicIPAddresses/', variables('masterPublicIPAddressName'))]"
+      ],
+      "location": "[variables('storageLocation')]",
+      "name": "[variables('diagnosticsStorageAccountName')]",
+      "properties": {
+        "accountType": "[variables('vmSizesMap')[variables('masterVMSize')].storageAccountType]"
+      },
+      "type": "Microsoft.Storage/storageAccounts"
+    },
+    {
+      "apiVersion": "[variables('apiVersionDefault')]",
+      "location": "[resourceGroup().location]",
+      "name": "[variables('virtualNetworkName')]",
+      "properties": {
+        "addressSpace": {
+          "addressPrefixes": [
+            "[variables('masterAddressPrefix')]",
+            "[variables('agentAddressPrefix')]"
+          ]
+        },
+        "subnets": [
+          {
+            "name": "[variables('masterSubnetName')]",
+            "properties": {
+              "addressPrefix": "[variables('masterAddressPrefix')]"
+            }
+          },
+          {
+            "name": "[variables('agentPublicSubnetName')]",
+            "properties": {
+              "addressPrefix": "[variables('agentPublicAddressPrefix')]"
+            }
+          },
+          {
+            "name": "[variables('agentPrivateSubnetNameDisk')]",
+            "properties": {
+              "addressPrefix": "[variables('agentPrivateAddressPrefixDisk')]"
+            }
+          },
+          {
+            "name": "[variables('agentPrivateSubnetName')]",
+            "properties": {
+              "addressPrefix": "[variables('agentPrivateAddressPrefix')]"
+            }
+          }
+        ]
+      },
+      "type": "Microsoft.Network/virtualNetworks"
+    },
+    {
+      "apiVersion": "[variables('apiVersionDefault')]",
+      "location": "[resourceGroup().location]",
+      "name": "[variables('masterAvailabilitySet')]",
+      "properties": {},
+      "type": "Microsoft.Compute/availabilitySets"
+    },
+    {
+      "apiVersion": "[variables('apiVersionDefault')]",
+      "location": "[resourceGroup().location]",
+      "name": "[variables('masterPublicIPAddressName')]",
+      "properties": {
+        "dnsSettings": {
+          "domainNameLabel": "[variables('masterEndpointDNSNamePrefix')]"
+        },
+        "publicIPAllocationMethod": "Dynamic"
+      },
+      "type": "Microsoft.Network/publicIPAddresses"
+    },
+    {
+      "apiVersion": "[variables('apiVersionDefault')]",
+      "dependsOn": [
+        "[concat('Microsoft.Network/publicIPAddresses/', variables('masterPublicIPAddressName'))]"
+      ],
+      "location": "[resourceGroup().location]",
+      "name": "[variables('masterLbName')]",
+      "properties": {
+        "backendAddressPools": [
+          {
+            "name": "[variables('masterLbBackendPoolName')]"
+          }
+        ],
+        "frontendIPConfigurations": [
+          {
+            "name": "[variables('masterLbIPConfigName')]",
+            "properties": {
+              "publicIPAddress": {
+                "id": "[resourceId('Microsoft.Network/publicIPAddresses',variables('masterPublicIPAddressName'))]"
+              }
+            }
+          }
+        ]
+      },
+      "type": "Microsoft.Network/loadBalancers"
+    },
+    {
+      "apiVersion": "[variables('apiVersionDefault')]",
+      "copy": {
+        "count": "[variables('masterCount')]",
+        "name": "masterLbLoopNode"
+      },
+      "dependsOn": [
+        "[variables('masterLbID')]"
+      ],
+      "location": "[resourceGroup().location]",
+      "name": "[concat(variables('masterLbName'), '/', 'SSH-', variables('masterVMNamePrefix'), copyIndex())]",
+      "properties": {
+        "backendPort": 22,
+        "enableFloatingIP": false,
+        "frontendIPConfiguration": {
+          "id": "[variables('masterLbIPConfigID')]"
+        },
+        "frontendPort": "[copyIndex(2200)]",
+        "protocol": "tcp"
+      },
+      "type": "Microsoft.Network/loadBalancers/inboundNatRules"
+    },
+    {
+      "apiVersion": "[variables('apiVersionDefault')]",
+      "copy": {
+        "count": "[variables('masterCount')]",
+        "name": "nicLoopNode"
+      },
+      "dependsOn": [
+        "[variables('masterLbID')]",
+        "[variables('vnetID')]",
+        "[concat(variables('masterLbID'),'/inboundNatRules/SSH-',variables('masterVMNamePrefix'),copyIndex())]"
+      ],
+      "location": "[resourceGroup().location]",
+      "name": "[concat(variables('masterVMNamePrefix'), 'nic-', copyIndex())]",
+      "properties": {
+        "ipConfigurations": [
+          {
+            "name": "ipConfigNode",
+            "properties": {
+              "loadBalancerBackendAddressPools": [
+                {
+                  "id": "[concat(variables('masterLbID'), '/backendAddressPools/', variables('masterLbBackendPoolName'))]"
+                }
+              ],
+              "loadBalancerInboundNatRules": [
+                {
+                  "id": "[concat(variables('masterLbID'),'/inboundNatRules/SSH-',variables('masterVMNamePrefix'),copyIndex())]"
+                }
+              ],
+              "privateIPAddress": "[concat(split(variables('masterAddressPrefix'),'0/24')[0], copyIndex(variables('masterFirstAddr')))]",
+              "privateIPAllocationMethod": "Static",
+              "subnet": {
+                "id": "[variables('masterSubnetRef')]"
+              }
+            }
+          }
+        ]
+      },
+      "type": "Microsoft.Network/networkInterfaces"
+    },
+
+    {
+      "apiVersion": "[variables('apiVersionDefault')]",
+      "type": "Microsoft.Network/networkInterfaces",
+      "name": "[concat(variables('agentPrivateVMNamePrefixDisk'), 'nic-', copyIndex())]",
+      "location": "[resourceGroup().location]",
+      "copy": {
+        "name": "nicAgentLoopNode",
+        "count": "[variables('agentPrivateCountDisk')]"
+      },
+      "dependsOn": [
+        "[variables('vnetID')]"
+      ],
+      "properties": {
+        "ipConfigurations": [
+          {
+            "name": "ipConfigNode",
+            "properties": {
+              "privateIPAllocationMethod": "Dynamic",
+              "subnet": {
+                "id": "[concat('/subscriptions/', subscription().subscriptionId,'/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Network/virtualNetworks/', variables('virtualNetworkName'), '/subnets/', variables('agentPrivateSubnetNameDisk'))]"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "[variables('apiVersionDefault')]",
+      "type": "Microsoft.Network/networkInterfaces",
+      "name": "[concat(variables('agentPrivateVMNamePrefix'), 'nic-', copyIndex())]",
+      "location": "[resourceGroup().location]",
+      "copy": {
+        "name": "nicAgentLoopNode",
+        "count": "[variables('agentPrivateCount')]"
+      },
+      "dependsOn": [
+        "[variables('vnetID')]"
+      ],
+      "properties": {
+        "ipConfigurations": [
+          {
+            "name": "ipConfigNode",
+            "properties": {
+              "privateIPAllocationMethod": "Static",
+              "privateIPAddress": "[concat(split(variables('agentPrivateAddressPrefix'),'0/24')[0], add(mod(copyIndex(),variables('agentsPerIPv4Octet')), variables('agentFirstAddr')))]",
+              "subnet": {
+                "id": "[concat('/subscriptions/', subscription().subscriptionId,'/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Network/virtualNetworks/', variables('virtualNetworkName'), '/subnets/', variables('agentPrivateSubnetName'))]"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "[variables('apiVersionDefault')]",
+      "type": "Microsoft.Network/networkInterfaces",
+      "name": "[concat(variables('agentPublicVMNamePrefix'), 'nic-', copyIndex())]",
+      "location": "[resourceGroup().location]",
+      "copy": {
+        "name": "nicAgentLoopNode",
+        "count": "[variables('agentPublicCount')]"
+      },
+      "dependsOn": [
+        "[variables('agentsPublicLbID')]",
+        "[variables('vnetID')]"
+      ],
+      "properties": {
+        "ipConfigurations": [
+          {
+            "name": "ipConfigNode",
+            "properties": {
+              "privateIPAllocationMethod": "Static",
+              "privateIPAddress": "[concat(split(variables('agentPublicAddressPrefix'),'0.0/11')[0], div(copyIndex(),variables('agentsPerIPv4Octet')), '.', add(mod(copyIndex(),variables('agentsPerIPv4Octet')), variables('agentFirstAddr')))]",
+              "subnet": {
+                "id": "[concat('/subscriptions/', subscription().subscriptionId,'/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Network/virtualNetworks/', variables('virtualNetworkName'), '/subnets/', variables('agentPublicSubnetName'))]"
+              },
+              "loadBalancerBackendAddressPools": [
+                {
+                  "id": "[concat('/subscriptions/', subscription().subscriptionId,'/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Network/loadBalancers/', variables('agentsPublicLbName'), '/backendAddressPools/',variables('agentsPublicLbBackendPoolName'))]"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "[variables('apiVersionDefault')]",
+      "copy": {
+        "count": "[variables('masterCount')]",
+        "name": "vmLoopNode"
+      },
+      "dependsOn": [
+        "[concat('Microsoft.Network/networkInterfaces/', variables('masterVMNamePrefix'), 'nic-', copyIndex())]",
+        "[concat('Microsoft.Compute/availabilitySets/',variables('masterAvailabilitySet'))]",
+        "[variables('masterStorageAccountName')]",
+        "[variables('diagnosticsStorageAccountName')]"
+      ],
+      "location": "[resourceGroup().location]",
+      "name": "[concat(variables('masterVMNamePrefix'), copyIndex())]",
+      "properties": {
+        "availabilitySet": {
+          "id": "[resourceId('Microsoft.Compute/availabilitySets',variables('masterAvailabilitySet'))]"
+        },
+        "diagnosticsProfile": {
+          "bootDiagnostics": {
+            "enabled": "[variables('enableVMDiagnostics')]",
+            "storageUri": "[reference(concat('Microsoft.Storage/storageAccounts/', variables('diagnosticsStorageAccountName')), variables('apiVersionStorage')).primaryEndpoints.blob]"
+          }
+        },
+        "hardwareProfile": {
+          "vmSize": "[variables('masterVMSize')]"
+        },
+        "networkProfile": {
+          "networkInterfaces": [
+            {
+              "id": "[resourceId('Microsoft.Network/networkInterfaces',concat(variables('masterVMNamePrefix'), 'nic-', copyIndex()))]"
+            }
+          ]
+        },
+        "osProfile": {
+          "adminPassword": "[variables('adminPassword')]",
+          "adminUsername": "[variables('adminUsername')]",
+          "computername": "[concat(variables('masterVMNamePrefix'), copyIndex())]",
+          "customData": "[base64(concat(variables('mastercloudconfig'), '\n        com.netflix.exhibitor.azure.account-name=', variables('masterStorageAccountName'), '\n        com.netflix.exhibitor.azure.account-key=', listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('masterStorageAccountName')), '2015-06-15').key1 ))]",
+          "linuxConfiguration": "[variables('linuxConfiguration')]"
+        },
+        "storageProfile": {
+          "imageReference": {
+            "offer": "[variables('osImageOffer')]",
+            "publisher": "[variables('osImagePublisher')]",
+            "sku": "[variables('osImageSKU')]",
+            "version": "[variables('osImageVersion')]"
+          },
+          "osDisk": {
+            "caching": "ReadWrite",
+            "createOption": "FromImage",
+            "name": "[concat(variables('masterVMNamePrefix'), copyIndex(),'-osdisk')]",
+            "vhd": {
+              "uri": "[concat(reference(concat('Microsoft.Storage/storageAccounts/',variables('masterStorageAccountName')),variables('apiVersionStorage')).primaryEndpoints.blob,'vhds/',variables('masterVMNamePrefix'),copyIndex(),'-osdisk.vhd')]"
+            }
+          }
+        }
+      },
+      "type": "Microsoft.Compute/virtualMachines"
+    },
+    {
+      "apiVersion": "[variables('apiVersionDefault')]",
+      "dependsOn": [
+        "[concat('Microsoft.Compute/virtualMachines/', variables('masterVMNamePrefix'), sub(variables('masterCount'), 1), '/extensions/linuxdiagnostic')]"
+      ],
+      "location": "[resourceGroup().location]",
+      "name": "[concat(variables('masterVMNamePrefix'), sub(variables('masterCount'), 1), '/waitforleader')]",
+      "properties": {
+        "autoUpgradeMinorVersion": true,
+        "publisher": "Microsoft.OSTCExtensions",
+        "settings": {
+          "commandToExecute": "sh -c 'until ping -c1 leader.mesos;do echo waiting for leader.mesos;sleep 15;done;echo leader.mesos up'"
+        },
+        "type": "CustomScriptForLinux",
+        "typeHandlerVersion": "1.4"
+      },
+      "type": "Microsoft.Compute/virtualMachines/extensions"
+    },
+    {
+      "apiVersion": "[variables('apiVersionDefault')]",
+      "copy": {
+        "count": "[variables('masterCount')]",
+        "name": "vmLoopNode"
+      },
+      "dependsOn": [
+        "[concat('Microsoft.Compute/virtualMachines/', concat(variables('masterVMNamePrefix'), copyIndex()))]"
+      ],
+      "location": "[resourceGroup().location]",
+      "name": "[concat(variables('masterVMNamePrefix'), copyIndex(), '/linuxdiagnostic')]",
+      "properties": {
+        "autoUpgradeMinorVersion": true,
+        "protectedSettings": {
+          "storageAccountKey": "[listKeys(variables('accountid'),variables('apiVersionStorage')).key1]",
+          "storageAccountName": "[variables(concat('diagnosticsStorageAccountName', '-', variables('enableVMDiagnostics')))]"
+        },
+        "publisher": "Microsoft.OSTCExtensions",
+        "settings": {
+          "StorageAccount": "[variables(concat('diagnosticsStorageAccountName', '-', variables('enableVMDiagnostics')))]",
+          "xmlCfg": "[base64(concat(variables('wadcfgxstart'), variables('masterVMNamePrefix'), copyIndex(), variables('wadcfgxend')))]"
+        },
+        "type": "LinuxDiagnostic",
+        "typeHandlerVersion": "2.3"
+      },
+      "type": "Microsoft.Compute/virtualMachines/extensions"
+    },
+    {
+      "apiVersion": "[variables('apiVersionStorage')]",
+      "dependsOn": [
+        "[concat('Microsoft.Network/publicIPAddresses/', variables('masterPublicIPAddressName'))]"
+      ],
+      "location": "[variables('storageLocation')]",
+      "name": "[variables('agentStoragePublicAccountName')]",
+      "properties": {
+        "accountType": "[variables('vmSizesMap')[variables('agentVMSize')].storageAccountType]"
+      },
+      "type": "Microsoft.Storage/storageAccounts"
+    },
+    {
+      "apiVersion": "[variables('apiVersionDefault')]",
+      "location": "[resourceGroup().location]",
+      "name": "[variables('agentPublicIPAddressName')]",
+      "properties": {
+        "dnsSettings": {
+          "domainNameLabel": "[variables('agentEndpointDNSNamePrefix')]"
+        },
+        "publicIPAllocationMethod": "Dynamic"
+      },
+      "type": "Microsoft.Network/publicIPAddresses"
+    },
+    {
+      "apiVersion": "[variables('apiVersionDefault')]",
+      "dependsOn": [
+        "[concat('Microsoft.Network/publicIPAddresses/', variables('agentPublicIPAddressName'))]"
+      ],
+      "location": "[resourceGroup().location]",
+      "name": "[variables('agentsPublicLbName')]",
+      "properties": {
+        "backendAddressPools": [
+          {
+            "name": "[variables('agentsPublicLbBackendPoolName')]"
+          }
+        ],
+        "frontendIPConfigurations": [
+          {
+            "name": "[variables('agentsPublicLbIPConfigName')]",
+            "properties": {
+              "publicIPAddress": {
+                "id": "[resourceId('Microsoft.Network/publicIPAddresses',variables('agentPublicIPAddressName'))]"
+              }
+            }
+          }
+        ],
+        "inboundNatRules": [],
+        "loadBalancingRules": [
+          {
+            "name": "LBRuleHTTP",
+            "properties": {
+              "backendAddressPool": {
+                "id": "[concat(variables('agentsPublicLbID'), '/backendAddressPools/', variables('agentsPublicLbBackendPoolName'))]"
+              },
+              "backendPort": 80,
+              "enableFloatingIP": false,
+              "frontendIPConfiguration": {
+                "id": "[variables('agentsPublicLbIPConfigID')]"
+              },
+              "frontendPort": 80,
+              "idleTimeoutInMinutes": 5,
+              "loadDistribution": "Default",
+              "probe": {
+                "id": "[concat(variables('agentsPublicLbID'),'/probes/tcpHTTPProbe')]"
+              },
+              "protocol": "tcp"
+            }
+          },
+          {
+            "name": "LBRuleHTTPS",
+            "properties": {
+              "backendAddressPool": {
+                "id": "[concat(variables('agentsPublicLbID'), '/backendAddressPools/', variables('agentsPublicLbBackendPoolName'))]"
+              },
+              "backendPort": 443,
+              "enableFloatingIP": false,
+              "frontendIPConfiguration": {
+                "id": "[variables('agentsPublicLbIPConfigID')]"
+              },
+              "frontendPort": 443,
+              "idleTimeoutInMinutes": 5,
+              "loadDistribution": "Default",
+              "probe": {
+                "id": "[concat(variables('agentsPublicLbID'),'/probes/tcpHTTPSProbe')]"
+              },
+              "protocol": "tcp"
+            }
+          },
+          {
+            "name": "LBRulePort8080",
+            "properties": {
+              "backendAddressPool": {
+                "id": "[concat(variables('agentsPublicLbID'), '/backendAddressPools/', variables('agentsPublicLbBackendPoolName'))]"
+              },
+              "backendPort": 8080,
+              "enableFloatingIP": false,
+              "frontendIPConfiguration": {
+                "id": "[variables('agentsPublicLbIPConfigID')]"
+              },
+              "frontendPort": 8080,
+              "idleTimeoutInMinutes": 5,
+              "loadDistribution": "Default",
+              "probe": {
+                "id": "[concat(variables('agentsPublicLbID'),'/probes/tcpPort8080Probe')]"
+              },
+              "protocol": "tcp"
+            }
+          }
+        ],
+        "probes": [
+          {
+            "name": "tcpHTTPProbe",
+            "properties": {
+              "intervalInSeconds": "5",
+              "numberOfProbes": "2",
+              "port": 80,
+              "protocol": "tcp"
+            }
+          },
+          {
+            "name": "tcpHTTPSProbe",
+            "properties": {
+              "intervalInSeconds": "5",
+              "numberOfProbes": "2",
+              "port": 443,
+              "protocol": "tcp"
+            }
+          },
+          {
+            "name": "tcpPort8080Probe",
+            "properties": {
+              "intervalInSeconds": "5",
+              "numberOfProbes": "2",
+              "port": 8080,
+              "protocol": "tcp"
+            }
+          }
+        ]
+      },
+      "type": "Microsoft.Network/loadBalancers"
+    },
+
+    {
+      "apiVersion": "[variables('apiVersionStorage')]",
+      "copy": {
+        "count": "[variables('agentStorageAccountsCount')]",
+        "name": "agentPrivateLoopNode"
+      },
+      "dependsOn": [
+        "[concat('Microsoft.Network/publicIPAddresses/', variables('masterPublicIPAddressName'))]"
+      ],
+      "location": "[variables('storageLocation')]",
+      "name": "[concat(variables('storageAccountPrefixes')[mod(copyIndex(),variables('storageAccountPrefixesCount'))],variables('storageAccountPrefixes')[div(copyIndex(),variables('storageAccountPrefixesCount'))],variables('agentStoragePrivateAccountName'),copyIndex())]",
+      "properties": {
+        "accountType": "[variables('vmSizesMap')[variables('agentVMSize')].storageAccountType]"
+      },
+      "type": "Microsoft.Storage/storageAccounts"
+    },
+    {
+      "apiVersion": "[variables('apiVersionStorage')]",
+      "copy": {
+        "count": "[variables('agentStorageAccountsCount')]",
+        "name": "agentPrivateDataLoopNode"
+      },
+      "dependsOn": [
+        "[concat('Microsoft.Network/publicIPAddresses/', variables('masterPublicIPAddressName'))]"
+      ],
+      "location": "[variables('storageLocation')]",
+      "name": "[concat(variables('storageAccountPrefixes')[mod(copyIndex(variables('dataStorageAccountPrefixSeed')),variables('storageAccountPrefixesCount'))],variables('storageAccountPrefixes')[div(copyIndex(variables('dataStorageAccountPrefixSeed')),variables('storageAccountPrefixesCount'))],variables('agentStoragePrivateDataAccountName'),copyIndex())]",
+      "properties": {
+        "accountType": "[variables('vmSizesMap')[variables('agentVMSize')].storageAccountType]"
+      },
+      "type": "Microsoft.Storage/storageAccounts"
+    },
+    {
+      "apiVersion": "[variables('apiVersionStorage')]",
+      "copy": {
+        "count": "[variables('agentPrivateCountDisk')]",
+        "name": "agentPrivateDataLoopNode"
+      },
+      "dependsOn": [
+        "[concat('Microsoft.Network/publicIPAddresses/', variables('masterPublicIPAddressName'))]"
+      ],
+      "location": "[variables('storageLocation')]",
+      "name": "[concat(variables('agentStoragePrivateDiskAccountName'),copyIndex())]",
+      "properties": {
+        "accountType": "[variables('vmSizesMap')[variables('agentVMSizeDisk')].storageAccountType]"
+      },
+      "type": "Microsoft.Storage/storageAccounts"
+    },
+
+    {
+      "apiVersion": "2015-06-15",
+      "type": "Microsoft.Compute/availabilitySets",
+      "name": "[variables('agentPrivateAvailabilitySetDisk')]",
+      "location": "[resourceGroup().location]",
+      "properties": {
+        "platformUpdateDomainCount": 3,
+        "platformFaultDomainCount": 3
+      }
+    },
+    {
+      "apiVersion": "2015-06-15",
+      "type": "Microsoft.Compute/availabilitySets",
+      "name": "[variables('agentPrivateAvailabilitySet')]",
+      "location": "[resourceGroup().location]",
+      "properties": {
+        "platformUpdateDomainCount": 3,
+        "platformFaultDomainCount": 3
+      }
+    },
+    {
+      "apiVersion": "2015-06-15",
+      "type": "Microsoft.Compute/availabilitySets",
+      "name": "[variables('agentPublicAvailabilitySet')]",
+      "location": "[resourceGroup().location]",
+      "properties": {}
+    },
+    {
+      "apiVersion": "2015-06-15",
+      "type": "Microsoft.Compute/virtualMachines",
+      "name": "[concat(variables('agentPublicVMNamePrefix'), copyIndex())]",
+      "location": "[resourceGroup().location]",
+      "copy": {
+        "name": "vmLoopNode",
+        "count": "[variables('agentPublicCount')]"
+      },
+      "dependsOn": [
+        "[concat('Microsoft.Storage/storageAccounts/', variables('storageAccountPrefixes')[mod(div(copyIndex(),variables('vmsPerStorageAccount')),variables('storageAccountPrefixesCount'))],variables('storageAccountPrefixes')[div(div(copyIndex(),variables('vmsPerStorageAccount')),variables('storageAccountPrefixesCount'))],variables('agentStoragePrivateAccountName'),div(copyIndex(),variables('vmsPerStorageAccount')))]",
+        "[concat('Microsoft.Storage/storageAccounts/', variables('storageAccountPrefixes')[mod(add(variables('dataStorageAccountPrefixSeed'),div(copyIndex(),variables('vmsPerStorageAccount'))),variables('storageAccountPrefixesCount'))],variables('storageAccountPrefixes')[div(add(variables('dataStorageAccountPrefixSeed'),div(copyIndex(),variables('vmsPerStorageAccount'))),variables('storageAccountPrefixesCount'))],variables('agentStoragePrivateDataAccountName'),div(copyIndex(),variables('vmsPerStorageAccount')))]",
+        "[concat('Microsoft.Network/networkInterfaces/', variables('agentPublicVMNamePrefix'), 'nic-', copyIndex())]",
+        "[concat('Microsoft.Compute/availabilitySets/', variables('agentPublicAvailabilitySet'))]"
+      ],
+      "properties": {
+        "availabilitySet": {
+          "id": "[resourceId('Microsoft.Compute/availabilitySets',variables('agentPublicAvailabilitySet'))]"
+        },
+        "hardwareProfile": {
+          "vmSize": "[variables('agentVMSize')]"
+        },
+        "osProfile": {
+          "computername": "[concat(variables('agentPublicVMNamePrefix'), copyIndex())]",
+          "adminUsername": "[variables('adminUsername')]",
+          "adminPassword": "[variables('adminPassword')]",
+          "customData": "[base64(concat(variables('publiccloudconfig'), '\n        com.netflix.exhibitor.azure.account-name=', variables('masterStorageAccountName'), '\n        com.netflix.exhibitor.azure.account-key=', listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('masterStorageAccountName')), '2015-06-15').key1 ))]",
+          "linuxConfiguration": "[variables('linuxConfiguration')]"
+        },
+        "storageProfile": {
+          "imageReference": {
+            "publisher": "[variables('osImagePublisher')]",
+            "offer": "[variables('osImageOffer')]",
+            "sku": "[variables('osImageSKU')]",
+            "version": "[variables('osImageVersion')]"
+          },
+          "osDisk": {
+            "name": "[concat(variables('agentPublicVMNamePrefix'), copyIndex(),'-osdisk')]",
+            "vhd": {
+              "uri": "[concat('http://',variables('storageAccountPrefixes')[mod(div(copyIndex(),variables('vmsPerStorageAccount')),variables('storageAccountPrefixesCount'))],variables('storageAccountPrefixes')[div(div(copyIndex(),variables('vmsPerStorageAccount')),variables('storageAccountPrefixesCount'))],variables('agentStoragePrivateAccountName'),div(copyIndex(),variables('vmsPerStorageAccount')), '.blob.core.windows.net/vhds/', variables('agentPublicVMNamePrefix'), copyIndex(), '-osdisk.vhd')]"
+            },
+            "caching": "ReadOnly",
+            "createOption": "FromImage"
+          }
+        },
+        "networkProfile": {
+          "networkInterfaces": [
+            {
+              "id": "[resourceId('Microsoft.Network/networkInterfaces',concat(variables('agentPublicVMNamePrefix'), 'nic-', copyIndex()))]"
+            }
+          ]
+        },
+        "diagnosticsProfile": {
+          "bootDiagnostics": {
+            "enabled": "[variables('enableVMDiagnostics')]",
+            "storageUri": "[reference(concat('Microsoft.Storage/storageAccounts/', variables('diagnosticsStorageAccountName')), variables('apiVersionStorage')).primaryEndpoints.blob]"
+          }
+        }
+      }
+    },
+    {
+      "apiVersion": "2015-06-15",
+      "type": "Microsoft.Compute/virtualMachines",
+      "name": "[concat(variables('agentPrivateVMNamePrefix'), copyIndex())]",
+      "location": "[resourceGroup().location]",
+      "copy": {
+        "name": "vmLoopNode",
+        "count": "[variables('agentPrivateCount')]"
+      },
+      "dependsOn": [
+        "[concat('Microsoft.Storage/storageAccounts/', variables('storageAccountPrefixes')[mod(div(copyIndex(),variables('vmsPerStorageAccount')),variables('storageAccountPrefixesCount'))],variables('storageAccountPrefixes')[div(div(copyIndex(),variables('vmsPerStorageAccount')),variables('storageAccountPrefixesCount'))],variables('agentStoragePrivateAccountName'),div(copyIndex(),variables('vmsPerStorageAccount')))]",
+        "[concat('Microsoft.Storage/storageAccounts/', variables('storageAccountPrefixes')[mod(add(variables('dataStorageAccountPrefixSeed'),div(copyIndex(),variables('vmsPerStorageAccount'))),variables('storageAccountPrefixesCount'))],variables('storageAccountPrefixes')[div(add(variables('dataStorageAccountPrefixSeed'),div(copyIndex(),variables('vmsPerStorageAccount'))),variables('storageAccountPrefixesCount'))],variables('agentStoragePrivateDataAccountName'),div(copyIndex(),variables('vmsPerStorageAccount')))]",
+        "[concat('Microsoft.Network/networkInterfaces/', variables('agentPrivateVMNamePrefix'), 'nic-', copyIndex())]",
+        "[concat('Microsoft.Compute/availabilitySets/', variables('agentPrivateAvailabilitySet'))]"
+      ],
+      "properties": {
+        "availabilitySet": {
+          "id": "[resourceId('Microsoft.Compute/availabilitySets',variables('agentPrivateAvailabilitySet'))]"
+        },
+        "hardwareProfile": {
+          "vmSize": "[variables('agentVMSize')]"
+        },
+        "osProfile": {
+          "computername": "[concat(variables('agentPrivateVMNamePrefix'), copyIndex())]",
+          "adminUsername": "[variables('adminUsername')]",
+          "adminPassword": "[variables('adminPassword')]",
+          "customData": "[base64(concat(variables('privateconfig'), '\n        com.netflix.exhibitor.azure.account-name=', variables('masterStorageAccountName'), '\n        com.netflix.exhibitor.azure.account-key=', listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('masterStorageAccountName')), '2015-06-15').key1))]",
+          "linuxConfiguration": "[variables('linuxConfiguration')]"
+        },
+        "storageProfile": {
+          "imageReference": {
+            "publisher": "[variables('osImagePublisher')]",
+            "offer": "[variables('osImageOffer')]",
+            "sku": "[variables('osImageSKU')]",
+            "version": "[variables('osImageVersion')]"
+          },
+          "osDisk": {
+            "name": "[concat(variables('agentPrivateVMNamePrefix'), copyIndex(),'-osdisk')]",
+            "vhd": {
+              "uri": "[concat('http://',variables('storageAccountPrefixes')[mod(div(copyIndex(),variables('vmsPerStorageAccount')),variables('storageAccountPrefixesCount'))],variables('storageAccountPrefixes')[div(div(copyIndex(),variables('vmsPerStorageAccount')),variables('storageAccountPrefixesCount'))],variables('agentStoragePrivateAccountName'),div(copyIndex(),variables('vmsPerStorageAccount')), '.blob.core.windows.net/vhds/', variables('agentPrivateVMNamePrefix'), copyIndex(), '-osdisk.vhd')]"
+            },
+            "caching": "ReadOnly",
+            "createOption": "FromImage"
+          }
+        },
+        "networkProfile": {
+          "networkInterfaces": [
+            {
+              "id": "[resourceId('Microsoft.Network/networkInterfaces',concat(variables('agentPrivateVMNamePrefix'), 'nic-', copyIndex()))]"
+            }
+          ]
+        },
+        "diagnosticsProfile": {
+          "bootDiagnostics": {
+            "enabled": "[variables('enableVMDiagnostics')]",
+            "storageUri": "[reference(concat('Microsoft.Storage/storageAccounts/', variables('diagnosticsStorageAccountName')), variables('apiVersionStorage')).primaryEndpoints.blob]"
+          }
+        }
+      }
+    },
+    {
+      "apiVersion": "2015-06-15",
+      "type": "Microsoft.Compute/virtualMachines",
+      "name": "[concat(variables('agentPrivateVMNamePrefixDisk'), copyIndex())]",
+      "location": "[resourceGroup().location]",
+      "copy": {
+        "name": "vmLoopNode",
+        "count": "[variables('agentPrivateCountDisk')]"
+      },
+      "dependsOn": [
+        "[concat('Microsoft.Storage/storageAccounts/', variables('agentStoragePrivateDiskAccountName'),copyIndex())]",
+        "[concat('Microsoft.Network/networkInterfaces/', variables('agentPrivateVMNamePrefixDisk'), 'nic-', copyIndex())]",
+        "[concat('Microsoft.Compute/availabilitySets/', variables('agentPrivateAvailabilitySetDisk'))]"
+      ],
+      "properties": {
+        "availabilitySet": {
+          "id": "[resourceId('Microsoft.Compute/availabilitySets',variables('agentPrivateAvailabilitySetDisk'))]"
+        },
+        "hardwareProfile": {
+          "vmSize": "[variables('agentVMSizeDisk')]"
+        },
+        "osProfile": {
+          "computername": "[concat(variables('agentPrivateVMNamePrefixDisk'), copyIndex())]",
+          "adminUsername": "[variables('adminUsername')]",
+          "adminPassword": "[variables('adminPassword')]",
+          "customData": "[base64(concat(variables('diskconfig'), '\n        com.netflix.exhibitor.azure.account-name=', variables('masterStorageAccountName'), '\n        com.netflix.exhibitor.azure.account-key=', listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('masterStorageAccountName')), '2015-06-15').key1 ))]",  
+          "linuxConfiguration": "[variables('linuxConfiguration')]"
+        },
+        "storageProfile": {
+          "imageReference": {
+            "publisher": "[variables('osImagePublisher')]",
+            "offer": "[variables('osImageOffer')]",
+            "sku": "[variables('osImageSKU')]",
+            "version": "[variables('osImageVersion')]"
+          },
+          "osDisk": {
+            "name": "[concat(variables('agentPrivateVMNamePrefixDisk'), copyIndex(),'-osdisk')]",
+            "vhd": {
+              "uri": "[concat('http://',variables('agentStoragePrivateDiskAccountName'), copyIndex(),'.blob.core.windows.net/vhds/', variables('agentPrivateVMNamePrefixDisk'), copyIndex(), '-osdisk.vhd')]"
+            },
+            "caching": "ReadOnly",
+            "createOption": "FromImage"
+          },
+          "dataDisks": [
+            {
+              "name": "[concat(variables('agentPrivateVMNamePrefixDisk'), copyIndex(),'-datadisk-0')]",
+              "diskSizeGB": "128",
+              "lun": 0,
+              "vhd": {
+                "uri": "[concat('http://',variables('agentStoragePrivateDiskAccountName'),copyIndex(), '.blob.core.windows.net/vhds/', variables('agentPrivateVMNamePrefixDisk'), copyIndex(),'--datadisk-0.vhd')]"
+              },
+              "createOption": "Empty"
+            },
+            {
+              "name": "[concat(variables('agentPrivateVMNamePrefixDisk'), copyIndex(),'-datadisk-1')]",
+              "diskSizeGB": "128",
+              "lun": 1,
+              "vhd": {
+                "uri": "[concat('http://',variables('agentStoragePrivateDiskAccountName'),copyIndex(), '.blob.core.windows.net/vhds/', variables('agentPrivateVMNamePrefixDisk'), copyIndex(),'--datadisk-1.vhd')]"
+              },
+              "createOption": "Empty"
+            }
+          ]
+        },
+        "networkProfile": {
+          "networkInterfaces": [
+            {
+              "id": "[resourceId('Microsoft.Network/networkInterfaces',concat(variables('agentPrivateVMNamePrefixDisk'), 'nic-', copyIndex()))]"
+            }
+          ]
+        },
+        "diagnosticsProfile": {
+          "bootDiagnostics": {
+            "enabled": "[variables('enableVMDiagnostics')]",
+            "storageUri": "[reference(concat('Microsoft.Storage/storageAccounts/', variables('diagnosticsStorageAccountName')), variables('apiVersionStorage')).primaryEndpoints.blob]"
+          }
+        }
+      }
+    }
+  ],
+  "outputs": {
+    "agentFQDN": {
+      "type": "string",
+      "value": "[reference(concat('Microsoft.Network/publicIPAddresses/', variables('agentPublicIPAddressName'))).dnsSettings.fqdn]"
+    },
+    "diagnosticsStorageAccountUri": {
+      "type": "string",
+      "value": "[reference(concat('Microsoft.Storage/storageAccounts/', variables('diagnosticsStorageAccountName')), variables('apiVersionStorage')).primaryEndpoints.blob]"
+    },
+    "jumpboxFQDN": {
+      "type": "string",
+      "value": ""
+    },
+    "masterFQDN": {
+      "type": "string",
+      "value": "[reference(concat('Microsoft.Network/publicIPAddresses/', variables('masterPublicIPAddressName'))).dnsSettings.fqdn]"
+    }
+  }
+}

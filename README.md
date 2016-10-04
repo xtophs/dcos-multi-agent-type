@@ -4,9 +4,9 @@ ACS deployment with customizable node configurations. Many applicaitions require
 
 This template deploys:
 * 3 masters
-* public agents
-* private agents without local dataDisks 
-* private agents with local dataDisks mounted as host volumes
+* 3 public agents
+* 1 private agent without local dataDisks 
+* 1 private agent with local dataDisks mounted as host volumes
 
 ## Private Agents with Disk Configuration
 * 2 local dataDisks
@@ -14,7 +14,7 @@ This template deploys:
 * Custom Mesos attribute HasDisk is defined as "true" 
 
 ## Deploy from Azure CLI
-Other custom ACS templates fail to deploy because line feeds get lots in translation from customData in the template to user-data.txt on the VM to cloud-config.txt on the VM.
+[Other custom ACS templates](https://github.com/anhowe/acs/tree/master/dcos-attacheddisks) fail to deploy because line feeds get lost in translation from customData in the template to user-data.txt on the VM to cloud-config.txt on the VM.
 
 This template create the customData from the YAML templates. The templates are written to make sure translation all the way to cloud-config.txt goes well. Note the double \\ in 
 

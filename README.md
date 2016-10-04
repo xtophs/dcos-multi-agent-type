@@ -21,6 +21,12 @@ This template deploys:
 * Custom Mesos attribute HasDisk is defined as "true" 
 
 ## Deploy from Azure CLI
+To provision a cluster simply run:
+
+deploy.sh -l <location> -g <resourceGroupName> -d <dnsLabel>
+
+The dnsLabel parameter is used as the dnsLabel for the agent pool Azure Load Balancer. The dnsLabel for the masters' load balancer, which is used for SSH access to the master nodes, appends an 'm' to the dnsLabel.
+
 [Other custom ACS templates](https://github.com/anhowe/acs/tree/master/dcos-attacheddisks) fail to deploy because line feeds get lost in translation from customData in the template to user-data.txt on the VM to cloud-config.txt on the VM.
 
 This template create the customData from the YAML templates. The templates are written to make sure translation all the way to cloud-config.txt goes well. Note the double \\ in 
@@ -38,4 +44,6 @@ and
 The ```\\``` is required to ensure proper formatting of the cloud-config.txt.
 
 ## Known Issues
-Navstar crashes with Standard_A1 sized agents.
+* Navstar crashes with Standard_A1 sized agents.
+* There is one cloud config parameter that's passed to the YAML at runtime. The exhibitor requires the storage account for master nodes and the associated key. If that storage account is provisioned in the same template, storage account name and key need to be added to the config string at runtime.
+* The template could be improved by passing the masters' IP addresses to the template. Since the addresses are currently hardcoded in the ARM template, also hardcoding the addresses in the YAML files improves readability of the ARM template. Ideally, those would be added to the configuration at runtime.
